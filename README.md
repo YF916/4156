@@ -11,7 +11,7 @@ Part 1:
 
 Part 2:
 
-    Team Name:
+    Team Name: The A
 
 Part 3:
 
@@ -20,4 +20,4 @@ Part 3:
 
 Part 4: 
 
-    GitHub Repository Link:
+    GitHub Repository Link: https://github.com/YF916/COMSW4156-ASE-project
