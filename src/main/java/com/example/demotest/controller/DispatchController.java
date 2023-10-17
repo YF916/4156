@@ -1,7 +1,11 @@
 package com.example.demotest.controller;
 
+import com.example.demotest.model.DispatchHistory;
 import com.example.demotest.model.Responder;
 import com.example.demotest.repository.ResponderRepository;
+import com.example.demotest.repository.DispatchHistoryRepository;
+import com.example.demotest.repository.ResponderRepository;
+import com.example.demotest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,12 +14,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 
 @Controller
 @RequestMapping(path="/responder")
 public class DispatchController {
     @Autowired
     private ResponderRepository responderRepository;
+    @Autowired
+    private DispatchHistoryRepository dispatchHistoryRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping(path="/add")
     public @ResponseBody
@@ -59,5 +72,52 @@ public class DispatchController {
         responderToDispatch.setLatitude(latitude);
         responderRepository.save(responderToDispatch);
         return "Dispatched";
+    }
+
+    @GetMapping(path="/recommend/rate") // called when the dispatch starts
+    public @ResponseBody
+    Responder getRateRecommend (@RequestParam("user_id") Integer id) {
+        Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(id));
+        Responder responder = null;
+        int maxRate = -1;
+        for (DispatchHistory history: allHistory) {
+            if (history.getRating() > maxRate) {
+                maxRate = history.getRating();
+                responder = history.getResponder();
+            }
+        }
+        return responder;
+    }
+
+    @GetMapping(path="/recommend/frequency") // called when the dispatch starts
+    public @ResponseBody
+    Responder getFreqRecommend (@RequestParam("user_id") Integer id) {
+        Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(id));
+        ArrayList<Responder> responders = new ArrayList<>();
+        for (DispatchHistory history: allHistory) {
+            responders.add(history.getResponder());
+        }
+        Map<Responder, Integer> countMap = new HashMap<>();
+        for(Responder r: responders)
+        {
+            Integer count = countMap.get(r);
+            if(count == null) {
+                count = 0;
+            }
+            count++;
+            countMap.put(r, count);
+        }
+
+        Map.Entry<Responder, Integer> mostRepeated = null;
+        for(Map.Entry<Responder, Integer> e: countMap.entrySet())
+        {
+            if(mostRepeated == null || mostRepeated.getValue() < e.getValue())
+                mostRepeated = e;
+        }
+        try {
+            return mostRepeated.getKey();
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 }
