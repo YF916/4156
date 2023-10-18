@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 @Table(name = "DispatchHistory")
 public class DispatchHistory {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
 
@@ -23,9 +23,9 @@ public class DispatchHistory {
     @Column(name = "arrival_time", nullable = true)
     private LocalDateTime arrivalTime;
 
-    @Column(name = "rating",nullable = true)
+    @Column(name = "rating", nullable = true)
     private int rating;
-    @Column(name = "feedback",nullable = true)
+    @Column(name = "feedback", nullable = true)
     private String feedback;
 
 
