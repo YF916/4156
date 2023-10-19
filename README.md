@@ -22,73 +22,78 @@ Part 4:
 
     GitHub Repository Link: https://github.com/YF916/COMSW4156-ASE-project
 
-# Weather API Documentation
+# Event Dispatch Service API Documentation
 
-Welcome to the Weather API documentation. This API allows you to retrieve weather information for a specific location by making a GET request with parameters.
+Welcome to the **Event Dispatch Service** API documentation.
 
-## Base URL
+**Service Description**
 
-The base URL for this API is `http://localhost:8080/user`.
+The Event Dispatch Service (EDS) is designed for effortless integration with other APIs and applications, 
+serving as a routing mechanism that matches event requests to the most suitable responders based on criteria like event type, location, and proximity. 
+EDS ensures swift request processing, offers clear endpoints for seamless integration, manages both dispatch and historical data retrieval.
 
-## Authentication
 
-This API does not require authentication.
+## User Management Base URL
 
-## Add a user
+The base URL for **user management** is `http://localhost:8080/user`.
 
-### Endpoint
+### Authentication
+
+These APIs do not require authentication.
+
+### 1. Add a new user
+
+#### Endpoint
 
 - **URL**: `/add`
 - **Method**: POST
 
-### Parameters
+#### Parameters
 
-- **`name` (required)**: The client's preferred name.
+- **`name` (required)**: The client's preferred name
 - **`phone` (optional)**: The client's mobile phone number
 
-### Example
+#### Example
 
 ```http
 POST http://localhost:8080/user/add
-
-Example Request Body:
 ```
+Example Request Body:
 ```json
 {
   "name": "testUser1",
   "phone": "0000000000"
 }
 ```
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
-  - **Content-Type**: string ("Saved")
+  - **Content-Type**: String
+  - **Example output**: "Saved"
 
 
-## Find all user
+### 2. Find all users
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/all`
 - **Method**: GET
 
-### Parameters
+#### Parameters
 
 None
 
-### Example
+#### Example
 
 ```http
-POST http://localhost:8080/user/all
-
+GET http://localhost:8080/user/all
+```
 Example Request Body:
-```
 ```json
-{
-}
+{}
 ```
-### Response
+#### Response
 
 - **Success Response**:
     - **HTTP Status Code**: 200 OK
@@ -109,109 +114,35 @@ Example Request Body:
    ]
 ```
 
-## Find all user
+## Responder Management Base URL
 
-### Endpoint
+The base URL for **responder management** is `http://localhost:8080/responder`.
 
-- **URL**: `/all`
-- **Method**: GET
+### Authentication
 
-### Parameters
+These APIs do not require authentication.
 
-None
+### 1. Add a new responder
 
-### Example
-
-```http
-POST http://localhost:8080/user/all
-
-Example Request Body:
-```
-```json
-{
-}
-```
-### Response
-
-- **Success Response**:
-    - **HTTP Status Code**: 200 OK
-    - **Content-Type**: application/json
-    - **Example output**:
-```json{
-    [
-        {
-            "id": 1,
-            "name": "Amy",
-            "phone": "12345678"
-        },
-        {
-            "id": 2,
-            "name": "Frank",
-            "phone": "1234567"
-        },
-   ]
-```
-## Find all user
-
-### Endpoint
-
-- **URL**: `/all`
-- **Method**: GET
-
-### Parameters
-
-None
-
-### Example
-
-```http
-POST http://localhost:8080/user/all
-
-Example Request Body:
-```
-```json
-{
-}
-```
-### Response
-
-- **Success Response**:
-    - **HTTP Status Code**: 200 OK
-    - **Content-Type**: application/json
-    - **Example output**:
-```json{
-    [
-        {
-            "id": 1,
-            "name": "Amy",
-            "phone": "12345678"
-        },
-        {
-            "id": 2,
-            "name": "Frank",
-            "phone": "1234567"
-        },
-   ]
-```
-
-## Add responder
-
-### Endpoint
+#### Endpoint
 
 - **URL**: `/add`
 - **Method**: POST
 
-### Request body
+#### Request body
 
+- **`name` (required)**: The responder's preferred name
+- **`phone` (optional)**: The responder's mobile phone number
+- **`latitude` (required)**: The responder's latitude
+- **`longitude` (required)**: The responder's longitude
+- **`status` (optional)**: The responder's current status
 
-
-### Example
+#### Example
 
 ```http
 POST http://localhost:8080/responder/add
-
-Example Request Body:
 ```
+Example Request Body:
 ```json
 {
   "name": "testResponder1",
@@ -221,29 +152,29 @@ Example Request Body:
   "status": "available"
 }
 ```
-### Response
+#### Response
 
 - **Success Response**:
     - **HTTP Status Code**: 200 OK
     - **Content-Type**: String
     - **Example output**: "Saved"
 
-## Search for an available responder, optionally filtered and ordered by rating
+### 2. Search for an available responder, optionally filtered and ordered by rating
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/search`
 - **Method**: Get
 
-### Parameters
+#### Parameters
 - **`rating` (optional)**: return only responder with rating larger than this value
 
-### Example
+#### Example
 
 ```http
 Get http://localhost:8080/responder/search?rating=0.0
 ```
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
@@ -281,14 +212,14 @@ Get http://localhost:8080/responder/search?rating=0.0
 ]
 ```
 
-## dispatch a responder 
+### 3. Dispatch a responder 
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/dispatch`
 - **Method**: POST
 
-### Request Body
+#### Request Body
 
 The request body should be a JSON object containing the following parameters:
 
@@ -296,41 +227,52 @@ The request body should be a JSON object containing the following parameters:
 - **`status` (required)**: status change of the responder
 - **`latitude` (required)**: latitude of the client
 - **`longitude` (required)**: longitude of the client
-### Example
+
+#### Example
 
 ```http
 POST http://localhost:8080/responder/dispatch
 ```
-The request body can be a JSON object containing the following parameters:
-id:6
-status:dispatched
-latitude:33.33
-longitude:22.22
+Example Request Body:
+```json
+{
+  "id": 6,
+  "status": "dispatched",
+  "latitude": "33.33",
+  "longitude": "22.22"
+}
+```
 
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK or 409 Conflict (handled by ResponderNotAvailableException)
   - **Content-Type**: Sting
   - **Example output**: "Dispatched" or "Responder does not exist"/"Responder not available at this moment"
 
-## recommend responder with the user's highest previous rate 
+### 4. Recommend a responder with the user's highest previous rate 
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/recommend/rate`
 - **Method**: Get
 
-### Parameters
-
+#### Parameters
 - **`id` (required)**: The caller's userid
-### Example
+
+#### Example
 
 ```http
 GET http://localhost:8080/responder/recommend/rate?user_id=1
 ```
+Example Request Body:
+```json
+{
+  "id": 1
+}
+```
 
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
@@ -348,23 +290,29 @@ GET http://localhost:8080/responder/recommend/rate?user_id=1
     }
     ```
 
-## recommend responder with the highest frequency in user's call history
+### 5. Recommend responder with the highest frequency in user's call history
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/recommend/frequency`
 - **Method**: Get
 
-### Parameters
+#### Parameters
 
 - **`id` (required)**: The caller's userid
-### Example
+#### Example
 
 ```http
 GET http://localhost:8080/responder/recommend/frequency?user_id=1
 ```
+Example Request Body:
+```json
+{
+  "id": 1
+}
+```
 
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
@@ -383,159 +331,171 @@ GET http://localhost:8080/responder/recommend/frequency?user_id=1
     ```
 
 
+## Dispatch History Management Base URL
 
-## Base URL
+The base URL for **dispatch history management** is `http://localhost:8080/dispatch-history`.
 
-The base URL for this API is `https://api.example.com/weather`.
+### Authentication
 
-## Authentication
+These APIs do not require authentication.
 
-This API does not require authentication.
+### 1. Start a new dispatch and record its dispatch history
 
-## start a new dispatch and record its dispatch history
-
-### Endpoint
+#### Endpoint
 
 - **URL**: `/start`
 - **Method**: POST
 
-### Request Body
+#### Request Body
 
 The request body should be a JSON object containing the following parameters:
 
 - **`user_id` (required)**: The userid of the caller
-- **`responder_id` (required)**: Id of the responder
+- **`responder_id` (required)**: id of the responder
 - **`start_time` (required)**: the start time of the dispatch
-### Example
+
+#### Example
 
 ```http
 POST http://localhost:8080/dispatch-history/start
 ```
-The request body can be a JSON object containing the following parameters:
-user_id:1
-responder_id:2
-start_time:2023-10-19T11:42:12
+Example Request Body:
+```json
+{
+  "user_id": 1,
+  "responder_id": 2,
+  "start_time": "2023-10-19T11:42:12"
+}
+```
 
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: String
-  - **Example output**:Saved
+  - **Example output**: "Saved"
 
 
-## rate a dispatch and provide feedback if wanted
+### 2. Rate a dispatch and provide feedback if wanted
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/rate`
 - **Method**: POST
 
-### Request Body
+#### Request Body
 
 The request body should be a JSON object containing the following parameters:
 - **`id` (required)**: The dispatch id
 - **`rating` (required)**: rating of this dispatch service
 - **`feedback` (optional)**: feedback of this dispatch service
-### Example
+#### Example
 
 ```http
 POST http://localhost:8080/dispatch-history/rate
 ```
-The request body can be a JSON object containing the following parameters:
-id:6
-rating:8.5
-feedback:Good
+Example Request Body:
+```json
+{
+  "id": 6,
+  "rating": 8.5,
+  "feedback": "Good"
+}
+```
 
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: String
-  - **Example output**:Rated
+  - **Example output**: "Rated"
 
-## the responder arrives at scene
+### 3. The responder arrives at scene
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/arrived`
 - **Method**: POST
 
-### Request Body
-
-The request body should be a JSON object containing the following parameters:
+#### Request Body
 - **`id` (required)**: The dispatch id
 - **`arrival_time` (required)**: the time when the responder arrives at scene
-### Example
+
+#### Example
 
 ```http
 POST http://localhost:8080/dispatch-history/arrived
 ```
-The request body can be a JSON object containing the following parameters:
-id:6
-arrival_time:2023-10-19T15:44:18
+Example Request Body:
+```json
+{
+  "id": 6,
+  "arrival_time": "2023-10-19T15:44:18"
+}
+```
 
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: String
-  - **Example output**: Arrived
+  - **Example output**: "Arrived"
 
-## the responder completes the client's requirement
+### 4. The responder completes the client's requirement
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/finished`
 - **Method**: POST
 
-### Request Body
+#### Request Body
 
-The request body should be a JSON object containing the following parameters:
 - **`id` (required)**: The dispatch id
-### Example
+
+#### Example
 
 ```http
 POST http://localhost:8080/dispatch-history/finished
 ```
-The request body can be a JSON object containing the following parameters:
-id:6
+Example Request Body:
+```json
+{
+  "id": 6
+}
+```
 
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: String
-  - **Example output**: Finished
+  - **Example output**: "Finished"
 
-## Search Dispatch Histories
+### 5. Search dispatch histories
 
-### Endpoint
+#### Endpoint
 
 - **URL**: `/search`
 - **Method**: GET
 
-### Parameters
+#### Parameters
 - **`filterBy` (optional)**: can be filtered by 'Responder' or 'User'
 - **`id` (optional)**: specify the Responder's id or the User's id
 
-### Example
+#### Example 1
 
 ```http
 GET http://localhost:8080/dispatch-history/search
-
+```
 Example Request Body:
-```
 ```json
-{
-}
+{}
 ```
-
+#### Example 2
 ```http
 GET http://localhost:8080/dispatch-history/search?filterBy=Responder&id=9
-
-Example Request Body:
 ```
+Example Request Body:
 ```json
 {
   "filterBy": "Responder",
@@ -543,7 +503,7 @@ Example Request Body:
 }
 ```
 
-### Response
+#### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
