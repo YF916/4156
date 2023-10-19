@@ -64,11 +64,13 @@ public class DispatchController {
     Responder getRateRecommend(@RequestParam("user_id") Integer id) {
         Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(id));
         Responder responder = null;
-        int maxRate = -1;
+        Double maxRate = -1.0;
         for (DispatchHistory history: allHistory) {
-            if (history.getRating() > maxRate) {
-                maxRate = history.getRating();
-                responder = history.getResponder();
+            if (history.getRating() != null ) {
+                if (history.getRating() > maxRate) {
+                    maxRate = history.getRating();
+                    responder = history.getResponder();
+                }
             }
         }
         return responder;

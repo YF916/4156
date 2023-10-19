@@ -38,7 +38,7 @@ public class DispatchHistoryController {
     }
     @PostMapping(path = "/rate") // when user want to give a feedback
     public @ResponseBody String rateDispatchHistory(@RequestParam int id,
-                                                       @RequestParam int rating, @RequestParam(required = false) String feedback) {
+                                                       @RequestParam Double rating, @RequestParam(required = false) String feedback) {
         DispatchHistory dispatchToRate = dispatchHistoryRepository.getReferenceById(id);
         dispatchToRate.setRating(rating);
         if (feedback != null) {
@@ -54,7 +54,7 @@ public class DispatchHistoryController {
         DispatchHistory dispatchToUpdate = dispatchHistoryRepository.getReferenceById(id);
         dispatchToUpdate.setArrivalTime(arrivalTime);
         dispatchHistoryRepository.save(dispatchToUpdate);
-        return "Rated";
+        return "Arrived";
     }
     @PostMapping(path = "/finished") // called when dispatcher arrived on scene
     public @ResponseBody String finishDispatch(@RequestParam int id) {

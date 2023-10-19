@@ -21,6 +21,7 @@ Part 3:
 Part 4: 
 
     GitHub Repository Link: https://github.com/YF916/COMSW4156-ASE-project
+
 # Weather API Documentation
 
 Welcome to the Weather API documentation. This API allows you to retrieve weather information for a specific location by making a GET request with parameters.
@@ -55,7 +56,7 @@ Example Request Body:
 ```json
 {
   "name": "testUser1",
-  "phone": "0000000000",
+  "phone": "0000000000"
 }
 ```
 ### Response
@@ -309,9 +310,9 @@ longitude:22.22
 ### Response
 
 - **Success Response**:
-  - **HTTP Status Code**: 200 OK
+  - **HTTP Status Code**: 200 OK or 409 Conflict (handled by ResponderNotAvailableException)
   - **Content-Type**: Sting
-  - **Example output**: "Dispatched"
+  - **Example output**: "Dispatched" or "Responder does not exist"/"Responder not available at this moment"
 
 ## recommend responder with the user's highest previous rate 
 
@@ -421,3 +422,157 @@ start_time:2023-10-19T11:42:12
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: String
   - **Example output**:Saved
+
+
+## rate a dispatch and provide feedback if wanted
+
+### Endpoint
+
+- **URL**: `/rate`
+- **Method**: POST
+
+### Request Body
+
+The request body should be a JSON object containing the following parameters:
+- **`id` (required)**: The dispatch id
+- **`rating` (required)**: rating of this dispatch service
+- **`feedback` (optional)**: feedback of this dispatch service
+### Example
+
+```http
+POST http://localhost:8080/dispatch-history/rate
+```
+The request body can be a JSON object containing the following parameters:
+id:6
+rating:8.5
+feedback:Good
+
+### Response
+
+- **Success Response**:
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: String
+  - **Example output**:Rated
+
+## the responder arrives at scene
+
+### Endpoint
+
+- **URL**: `/arrived`
+- **Method**: POST
+
+### Request Body
+
+The request body should be a JSON object containing the following parameters:
+- **`id` (required)**: The dispatch id
+- **`arrival_time` (required)**: the time when the responder arrives at scene
+### Example
+
+```http
+POST http://localhost:8080/dispatch-history/arrived
+```
+The request body can be a JSON object containing the following parameters:
+id:6
+arrival_time:2023-10-19T15:44:18
+
+### Response
+
+- **Success Response**:
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: String
+  - **Example output**: Arrived
+
+## the responder completes the client's requirement
+
+### Endpoint
+
+- **URL**: `/finished`
+- **Method**: POST
+
+### Request Body
+
+The request body should be a JSON object containing the following parameters:
+- **`id` (required)**: The dispatch id
+### Example
+
+```http
+POST http://localhost:8080/dispatch-history/finished
+```
+The request body can be a JSON object containing the following parameters:
+id:6
+
+### Response
+
+- **Success Response**:
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: String
+  - **Example output**: Finished
+
+## Search Dispatch Histories
+
+### Endpoint
+
+- **URL**: `/search`
+- **Method**: GET
+
+### Parameters
+- **`filterBy` (optional)**: can be filtered by 'Responder' or 'User'
+- **`id` (optional)**: specify the Responder's id or the User's id
+
+### Example
+
+```http
+GET http://localhost:8080/dispatch-history/search
+
+Example Request Body:
+```
+```json
+{
+}
+```
+
+```http
+GET http://localhost:8080/dispatch-history/search?filterBy=Responder&id=9
+
+Example Request Body:
+```
+```json
+{
+  "filterBy": "Responder",
+  "id": 9
+}
+```
+
+### Response
+
+- **Success Response**:
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: application/json
+  - **Example output**:
+```json{
+    [
+    {
+        "id": 6,
+        "caller": {
+            "id": 1,
+            "name": "Amy",
+            "phone": "12345678"
+        },
+        "responder": {
+            "id": 9,
+            "name": "testResponder2",
+            "phone": "9999999999",
+            "latitude": 50.71,
+            "longitude": 80.82,
+            "status": "available",
+            "rating": 9.5935,
+            "hibernateLazyInitializer": {}
+        },
+        "startTime": "2023-10-19T11:42:12",
+        "arrivalTime": "2023-10-19T15:44:18",
+        "rating": 9.0,
+        "feedback": "Good",
+        "status": "finished"
+    }
+]
+```

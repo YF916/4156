@@ -75,7 +75,7 @@ public class DispatchHistoryControllerTest {
     @Test
     public void testRateDispatch_Success() {
         int dispatchId = 1;
-        int rating = 5;
+        Double rating = 5.0;
         String feedback = "Great service!";
         DispatchHistory mockDispatch = new DispatchHistory();
 
@@ -120,7 +120,7 @@ public class DispatchHistoryControllerTest {
         when(dispatchHistoryRepository.getReferenceById(anyInt())).thenReturn(dispatchHistory);
 
         // Act
-        dispatchHistoryController.rateDispatchHistory(1, 5, "Good service");
+        dispatchHistoryController.rateDispatchHistory(1, 5.0, "Good service");
 
         // Assert
         assertEquals(5, dispatchHistory.getRating());

@@ -24,7 +24,7 @@ public class DispatchHistory {
     private LocalDateTime arrivalTime;
 
     @Column(name = "rating", nullable = true)
-    private int rating;
+    private Double rating;
     @Column(name = "feedback", nullable = true)
     private String feedback;
     @Column(name = "status")
@@ -71,11 +71,11 @@ public class DispatchHistory {
         this.arrivalTime = arrivalTime;
     }
 
-    public int getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
