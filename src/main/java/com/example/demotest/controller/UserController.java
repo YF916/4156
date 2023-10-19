@@ -21,6 +21,12 @@ public class UserController {
     public @ResponseBody String addNewUser(User user) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        if (user.getName() == null || user.getName().isEmpty()) {
+            throw new IllegalArgumentException("User's name is required");
+        }
         userRepository.save(user);
         return "Saved";
     }
