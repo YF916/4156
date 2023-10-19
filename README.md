@@ -1,7 +1,8 @@
 # COMSW4156 - ADVANCED SOFTWARE ENGINEERING
 
-### Assignment T0: Team Formation
-Part 1: 
+### Team Information
+
+    Team Name: The A
 
     Team Members:
         Xiaoning Bu (xb2171)
@@ -9,18 +10,25 @@ Part 1:
         Yifan Li (yl5337)
         Zian Song (zs2632)
 
-Part 2:
-
-    Team Name: The A
-
-Part 3:
-
     Programming Language: Java
     Development Platform: MacOS
 
-Part 4: 
-
     GitHub Repository Link: https://github.com/YF916/COMSW4156-ASE-project
+
+### Create the Database
+Open a terminal and open a MySQL client as a user who can create new users.
+
+For example, on a Linux system, use the following command:
+
+`$ sudo mysql --password` -- Connects to MySQL as root and allows access to the user from all hosts
+
+Then create a new database by running the following commands at the mysql prompt:
+
+`mysql> create database db_example;` -- Creates the new database
+
+`mysql> create user 'springuser'@'%' identified by 'ThePassword';` -- Creates the user
+
+`mysql> grant all on db_example.* to 'springuser'@'%';` -- Gives all privileges to the new user on the newly created database
 
 **Style Checker:**
 <img width="1512" alt="style-checker" src="https://github.com/YF916/COMSW4156-ASE-project/assets/144531191/78b1c561-0bbd-4109-9362-b01fafe81d10">
