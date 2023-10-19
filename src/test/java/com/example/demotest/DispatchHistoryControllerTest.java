@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -79,6 +80,80 @@ public class DispatchHistoryControllerTest {
         assertEquals("Rated", response);
         verify(dispatchHistoryRepository, times(1)).save(mockDispatch);
     }
+
+    @Test
+    public void testAddNewDispatchHistory_validInput_savesDispatchHistory() {
+        // Arrange
+        DispatchHistory dispatchHistory = new DispatchHistory();
+        when(userRepository.getReferenceById(anyInt())).thenReturn(new User());
+        when(responderRepository.getReferenceById(anyInt())).thenReturn(new Responder());
+
+        // Act
+        dispatchHistoryController.addNewDispatchHistory(1, 2, LocalDateTime.now());
+
+        // Assert
+        verify(dispatchHistoryRepository, times(1)).save(any(DispatchHistory.class));
+    }
+
+    @Test
+    public void testRateDispatchHistory_validInput_ratesDispatchHistory() {
+        // Arrange
+        DispatchHistory dispatchHistory = new DispatchHistory();
+        when(dispatchHistoryRepository.getReferenceById(anyInt())).thenReturn(dispatchHistory);
+
+        // Act
+        dispatchHistoryController.rateDispatchHistory(1, 5, "Good service");
+
+        // Assert
+        assertEquals(5, dispatchHistory.getRating());
+        assertEquals("Good service", dispatchHistory.getFeedback());
+    }
+
+
+
+    @Test
+    public void testUpdateArrivalTime_validInput_updatesArrivalTime() {
+        // Arrange
+        DispatchHistory dispatchHistory = new DispatchHistory();
+        LocalDateTime arrivalTime = LocalDateTime.now();
+        when(dispatchHistoryRepository.getReferenceById(anyInt())).thenReturn(dispatchHistory);
+
+        // Act
+        dispatchHistoryController.updateArrivalTime(1, arrivalTime);
+
+        // Assert
+        assertEquals(arrivalTime, dispatchHistory.getArrivalTime());
+    }
+
+
+
+
+    @Test
+    public void testSearchDispatchHistory_noFilter_returnsAll() {
+        // Arrange
+        when(dispatchHistoryRepository.findAll()).thenReturn(new ArrayList<DispatchHistory>());
+
+        // Act
+        Iterable<DispatchHistory> results = dispatchHistoryController.searchDispatchHistory(null, null);
+
+        // Assert
+        assertNotNull(results);
+    }
+
+    @Test
+    public void testSearchDispatchHistory_validInput_returnsDispatchHistories() {
+        // Arrange
+        when(dispatchHistoryRepository.findAll()).thenReturn(new ArrayList<DispatchHistory>());
+
+        // Act
+        Iterable<DispatchHistory> results = dispatchHistoryController.searchDispatchHistory(null, null);
+
+        // Assert
+        assertNotNull(results);
+    }
+
+
+
 
 }
 
