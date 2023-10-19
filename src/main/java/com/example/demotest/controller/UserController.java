@@ -37,15 +37,4 @@ public class UserController {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
-
-    @GetMapping(path = "/find/{id}")
-    public @ResponseBody User getUserById(@PathVariable Integer id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-        }
-    }
-
 }

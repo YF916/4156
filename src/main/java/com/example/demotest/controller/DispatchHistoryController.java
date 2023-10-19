@@ -75,14 +75,5 @@ public class DispatchHistoryController {
             return dispatchHistoryRepository.findAll();
         }
     }
-    @GetMapping(path = "/get/{id}")
-    public @ResponseBody DispatchHistory getDispatchHistoryById(@PathVariable Integer id) {
-        Optional<DispatchHistory> optionalDispatchHistory = dispatchHistoryRepository.findById(id);
-        if (optionalDispatchHistory.isPresent()) {
-            return optionalDispatchHistory.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DispatchHistory not found");
-        }
-    }
 
 }

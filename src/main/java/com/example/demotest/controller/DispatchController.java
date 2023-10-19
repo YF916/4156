@@ -32,6 +32,7 @@ public class DispatchController {
     public @ResponseBody
     String addNewResponder(Responder responder) {
         responder.setRating(10.0);//give the responder an initial rating of 10
+        responder.setStatus("available");
         responderRepository.save(responder);
         return "Saved";
     }
@@ -48,9 +49,9 @@ public class DispatchController {
             throw new ResponderNotAvailableException("Responder does not exist");
         }
         Responder responderToDispatch = responderRepository.getReferenceById(id);
-        /*if (!responderToDispatch.getStatus().equals("available")) {
+        if (!responderToDispatch.getStatus().equals("available")) {
             throw new ResponderNotAvailableException("Responder not available at this moment");
-        }*/
+        }
         responderToDispatch.setStatus(status);
         responderToDispatch.setLongitude(longitude);
         responderToDispatch.setLatitude(latitude);
@@ -101,15 +102,6 @@ public class DispatchController {
             return mostRepeated.getKey();
         } catch (NullPointerException e) {
             return null;
-        }
-    }
-    @GetMapping(path = "/get/{id}")
-    public @ResponseBody Responder getResponderById(@PathVariable Integer id) {
-        Optional<Responder> optionalResponder = responderRepository.findById(id);
-        if (optionalResponder.isPresent()) {
-            return optionalResponder.get();
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Responder not found");
         }
     }
 
