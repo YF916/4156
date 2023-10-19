@@ -8,10 +8,13 @@ import com.example.demotest.repository.ResponderRepository;
 import com.example.demotest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path = "/dispatch-history") // This means URL's start with /demo (after Application path)
@@ -72,6 +75,16 @@ public class DispatchHistoryController {
             return dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(id));
         } else {
             return dispatchHistoryRepository.findAll();
+        }
+    }
+
+    @GetMapping(path = "/get/{id}")
+    public @ResponseBody DispatchHistory getDispatchHistoryById(@PathVariable Integer id) throws ResponseStatusException {
+        Optional<DispatchHistory> optionalDispatchHistory = dispatchHistoryRepository.findById(id);
+        if (optionalDispatchHistory.isPresent()) {
+            return optionalDispatchHistory.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DispatchHistory not found");
         }
     }
 }
