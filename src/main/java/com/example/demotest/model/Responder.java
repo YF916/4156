@@ -83,7 +83,11 @@ public class Responder {
         this.status = status;
     }
 
-    public Double getRating() {return rating;}
+    public Double getRating() {
+        return rating;
+    }
 
-    public void setRating(Double rating) {this.rating = rating;}
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
 }

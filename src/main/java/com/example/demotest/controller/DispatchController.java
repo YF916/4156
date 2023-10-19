@@ -7,15 +7,12 @@ import com.example.demotest.repository.ResponderRepository;
 import com.example.demotest.repository.DispatchHistoryRepository;
 import com.example.demotest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 
 @Controller
@@ -31,7 +28,7 @@ public class DispatchController {
     @PostMapping(path = "/add")
     public @ResponseBody
     String addNewResponder(Responder responder) {
-        responder.setRating(10.0);//give the responder an initial rating of 10
+        responder.setRating(10.0); //give the responder an initial rating of 10
         responder.setStatus("available");
         responderRepository.save(responder);
         return "Saved";
@@ -39,7 +36,7 @@ public class DispatchController {
 
     @RequestMapping(path = "/search")//search for all available responders, optionally sort by rating
     public @ResponseBody Iterable<Responder> getAllResponders(@RequestParam(required = false, defaultValue = "0.0") Double rating) {
-        return responderRepository.findAllByRatingGreaterThanAndStatusEqualsOrderByRatingDesc(rating,"available");
+        return responderRepository.findAllByRatingGreaterThanAndStatusEqualsOrderByRatingDesc(rating, "available");
     }
 
     @PostMapping(path = "/dispatch") // dispatch a specific responder by id
@@ -66,7 +63,7 @@ public class DispatchController {
         Responder responder = null;
         Double maxRate = -1.0;
         for (DispatchHistory history: allHistory) {
-            if (history.getRating() != null ) {
+            if (history.getRating() != null) {
                 if (history.getRating() > maxRate) {
                     maxRate = history.getRating();
                     responder = history.getResponder();

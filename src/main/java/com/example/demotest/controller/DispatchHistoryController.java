@@ -7,16 +7,14 @@ import com.example.demotest.repository.ResponderRepository;
 import com.example.demotest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Controller // This means that this class is a Controller
-@RequestMapping(path = "/dispatch-history") // This means URL's start with /demo (after Application path)
+// This means URL's start with /dispatch-history (after Application path)
+@RequestMapping(path = "/dispatch-history")
 public class DispatchHistoryController {
     @Autowired
     private DispatchHistoryRepository dispatchHistoryRepository;
@@ -26,9 +24,11 @@ public class DispatchHistoryController {
     private ResponderRepository responderRepository;
 
     @PostMapping(path = "/start") // called when the dispatch starts
-    public @ResponseBody String addNewDispatchHistory(@RequestParam("user_id") int userId,
-                                                       @RequestParam("responder_id") int responderId,
-                                                       @RequestParam("start_time")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime) {
+    public @ResponseBody String addNewDispatchHistory(
+            @RequestParam("user_id") int userId,
+            @RequestParam("responder_id") int responderId,
+            @RequestParam("start_time")
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime) {
         DispatchHistory history = new DispatchHistory();
         history.setCaller(userRepository.getReferenceById(userId));
         history.setStartTime(startTime);
@@ -36,16 +36,19 @@ public class DispatchHistoryController {
         dispatchHistoryRepository.save(history);
         return "Saved";
     }
-    @PostMapping(path = "/rate") // when user want to give a feedback
+    // when user want to give a feedback
+    @PostMapping(path = "/rate")
     public @ResponseBody String rateDispatchHistory(@RequestParam int id,
-                                                       @RequestParam Double rating, @RequestParam(required = false) String feedback) {
+                                                    @RequestParam Double rating,
+                                                    @RequestParam(required = false) String feedback) {
         DispatchHistory dispatchToRate = dispatchHistoryRepository.getReferenceById(id);
         dispatchToRate.setRating(rating);
         if (feedback != null) {
             dispatchToRate.setFeedback(feedback);
         }
         Responder responder = responderRepository.getReferenceById(dispatchToRate.getResponder().getId());
-        responder.setRating(responder.getRating() * 0.9 + rating * 0.1);//rolling average
+        // rolling average
+        responder.setRating(responder.getRating() * 0.9 + rating * 0.1);
         dispatchHistoryRepository.save(dispatchToRate);
         return "Rated";
     }
@@ -56,14 +59,18 @@ public class DispatchHistoryController {
         dispatchHistoryRepository.save(dispatchToUpdate);
         return "Arrived";
     }
-    @PostMapping(path = "/finished") // called when dispatcher arrived on scene
+
+    // called when dispatcher arrived at scene
+    @PostMapping(path = "/finished")
     public @ResponseBody String finishDispatch(@RequestParam int id) {
         DispatchHistory dispatchToUpdate = dispatchHistoryRepository.getReferenceById(id);
         dispatchToUpdate.setStatus("finished");
         dispatchHistoryRepository.save(dispatchToUpdate);
         return "Finished";
     }
-    @GetMapping(path = "/search") // search dispatch history by user id/ responder id or return all dispatch history
+
+    // search dispatch history by user id/ responder id or return all dispatch history
+    @GetMapping(path = "/search")
     public @ResponseBody
     Iterable<DispatchHistory> searchDispatchHistory(@RequestParam(required = false) String filterBy,
                                                  @RequestParam(required = false) Integer id) {
