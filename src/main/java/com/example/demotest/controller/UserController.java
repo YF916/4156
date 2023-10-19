@@ -4,11 +4,12 @@ package com.example.demotest.controller;
 import com.example.demotest.model.User;
 import com.example.demotest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Controller // This means that this class is a Controller
 @RequestMapping(path = "/user") // This means URL's start with /user
@@ -21,6 +22,12 @@ public class UserController {
     public @ResponseBody String addNewUser(User user) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+        if (user.getName() == null || user.getName().isEmpty()) {
+            throw new IllegalArgumentException("User's name is required");
+        }
         userRepository.save(user);
         return "Saved";
     }
@@ -30,4 +37,15 @@ public class UserController {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
+
+    @GetMapping(path = "/find/{id}")
+    public @ResponseBody User getUserById(@PathVariable Integer id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            return optionalUser.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+    }
+
 }
