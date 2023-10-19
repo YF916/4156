@@ -22,6 +22,14 @@ Part 4:
 
     GitHub Repository Link: https://github.com/YF916/COMSW4156-ASE-project
 
+**API Testing:**
+
+All API entry points are tested using postman: https://www.postman.com/yf916/workspace/ase-api-testing/collection/30513862-0c556156-e066-42fa-8966-b0a5aebeb2d9?action=share&creator=30513862
+
+**Unit Testing:**
+
+All unit testing is stored in `/COMSW4156-ASE-project/src/test/java/com/example/demotest`
+
 # Event Dispatch Service API Documentation
 
 Welcome to the **Event Dispatch Service** API documentation.
