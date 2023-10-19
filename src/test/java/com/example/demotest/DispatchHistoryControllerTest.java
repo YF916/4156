@@ -41,6 +41,24 @@ public class DispatchHistoryControllerTest {
     }
 
     @Test
+    public void testStartNewDispatch_NonExistentUserOrResponder() {
+        int userId = 999; // non-existent user
+        int responderId = 999; // non-existent responder
+        LocalDateTime startTime = LocalDateTime.now();
+
+        when(userRepository.getReferenceById(userId)).thenReturn(null);
+        when(responderRepository.getReferenceById(responderId)).thenReturn(null);
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            dispatchHistoryController.addNewDispatchHistory(userId, responderId, startTime);
+        });
+
+        assertNotNull(exception);
+        verify(dispatchHistoryRepository, times(0)).save(any(DispatchHistory.class));
+    }
+
+
+    @Test
     public void testStartNewDispatch_Success() {
         int userId = 1;
         int responderId = 1;

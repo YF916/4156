@@ -1,6 +1,8 @@
 package com.example.demotest.controller;
 
 import com.example.demotest.model.DispatchHistory;
+import com.example.demotest.model.User;
+import com.example.demotest.model.Responder;
 import com.example.demotest.repository.DispatchHistoryRepository;
 import com.example.demotest.repository.ResponderRepository;
 import com.example.demotest.repository.UserRepository;
@@ -25,11 +27,19 @@ public class DispatchHistoryController {
     public @ResponseBody String addNewDispatchHistory(@RequestParam("user_id") int userId,
                                                        @RequestParam("responder_id") int responderId,
                                                        @RequestParam("start_time")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime) {
+        User user = userRepository.findById(userId).orElse(null);
+        Responder responder = responderRepository.findById(responderId).orElse(null);
+
+        if (user == null || responder == null) {
+            throw new RuntimeException("User or Responder not found");
+        }
+
         DispatchHistory history = new DispatchHistory();
-        history.setCaller(userRepository.getReferenceById(userId));
+        history.setCaller(user);
+        history.setResponder(responder);
         history.setStartTime(startTime);
-        history.setResponder(responderRepository.getReferenceById(responderId));
         dispatchHistoryRepository.save(history);
+
         return "Saved";
     }
     @PostMapping(path = "/rate") // when user want to give a feedback
