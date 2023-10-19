@@ -27,6 +27,8 @@ public class DispatchHistory {
     private int rating;
     @Column(name = "feedback", nullable = true)
     private String feedback;
+    @Column(name = "status")
+    private String status;
 
 
     public Integer getId() {
@@ -84,4 +86,8 @@ public class DispatchHistory {
     public void setFeedback(String feedback) {
         this.feedback = feedback;
     }
+
+    public String getStatus() {return status;}
+
+    public void setStatus(String status) {this.status = status;}
 }

@@ -1,6 +1,7 @@
 package com.example.demotest.controller;
 
 import com.example.demotest.model.DispatchHistory;
+import com.example.demotest.model.Responder;
 import com.example.demotest.repository.DispatchHistoryRepository;
 import com.example.demotest.repository.ResponderRepository;
 import com.example.demotest.repository.UserRepository;
@@ -40,8 +41,8 @@ public class DispatchHistoryController {
         if (feedback != null) {
             dispatchToRate.setFeedback(feedback);
         }
-        //rate responder
-        //if id does not exist
+        Responder responder = responderRepository.getReferenceById(dispatchToRate.getResponder().getId());
+        responder.setRating(responder.getRating() * 0.9 + rating * 0.1);//rolling average
         dispatchHistoryRepository.save(dispatchToRate);
         return "Rated";
     }
@@ -51,6 +52,13 @@ public class DispatchHistoryController {
         dispatchToUpdate.setArrivalTime(arrivalTime);
         dispatchHistoryRepository.save(dispatchToUpdate);
         return "Rated";
+    }
+    @PostMapping(path = "/finished") // called when dispatcher arrived on scene
+    public @ResponseBody String finishDispatch(@RequestParam int id) {
+        DispatchHistory dispatchToUpdate = dispatchHistoryRepository.getReferenceById(id);
+        dispatchToUpdate.setStatus("finished");
+        dispatchHistoryRepository.save(dispatchToUpdate);
+        return "Finished";
     }
     @GetMapping(path = "/search") // search dispatch history by user id/ responder id or return all dispatch history
     public @ResponseBody

@@ -32,6 +32,9 @@ public class Responder {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "rating")
+    private Double rating;
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -79,4 +82,8 @@ public class Responder {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public Double getRating() {return rating;}
+
+    public void setRating(Double rating) {this.rating = rating;}
 }

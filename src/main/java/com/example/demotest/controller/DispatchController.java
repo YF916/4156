@@ -1,5 +1,6 @@
 package com.example.demotest.controller;
 
+import com.example.demotest.exceptions.ResponderNotAvailableException;
 import com.example.demotest.model.DispatchHistory;
 import com.example.demotest.model.Responder;
 import com.example.demotest.repository.ResponderRepository;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 
 @Controller
@@ -32,41 +32,27 @@ public class DispatchController {
     @PostMapping(path = "/add")
     public @ResponseBody
     String addNewResponder(Responder responder) {
+        responder.setRating(10.0);//give the responder an initial rating of 10
         responderRepository.save(responder);
         return "Saved";
     }
 
-    @GetMapping(path = "/search")
-    public @ResponseBody Iterable<Responder> getAllResponders() {
-        // This returns a JSON or XML with the users
-        /*double centerLatitude = 40.7128;
-        double centerLongitude = 74.0060;
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        FullTextSession fullTextSession = Search.getFullTextSession(session);
-        QueryBuilder builder = fullTextSession.getSearchFactory()
-                .buildQueryBuilder().forEntity( Responder.class ).get();
-
-        org.apache.lucene.search.Query luceneQuery = builder
-                .spatial()
-                .within(2, Unit.KM )
-                .ofLatitude( centerLatitude )
-                .andLongitude( centerLongitude )
-                .createQuery();
-
-        org.hibernate.Query hibQuery = fullTextSession
-                .createFullTextQuery( luceneQuery, Responder.class );
-        List results = hibQuery.list();*/
-        return responderRepository.findAll();
+    @RequestMapping(path = "/search")//search for all available responders, optionally sort by rating
+    public @ResponseBody Iterable<Responder> getAllResponders(@RequestParam(required = false, defaultValue = "0.0") Double rating) {
+        return responderRepository.findAllByRatingGreaterThanAndStatusEqualsOrderByRatingDesc(rating,"available");
     }
-    @PostMapping(path = "/dispatch") // Map ONLY POST Requests
-    public @ResponseBody String dispatchResponder(@RequestParam Integer id,
-                                                   @RequestParam Double latitude, @RequestParam Double longitude) {
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
 
+    @PostMapping(path = "/dispatch") // dispatch a specific responder by id
+    public @ResponseBody String dispatchResponder(@RequestParam Integer id, @RequestParam String status,
+                                                   @RequestParam Double latitude, @RequestParam Double longitude) {
+        if (!responderRepository.existsById(id)) {
+            throw new ResponderNotAvailableException("Responder does not exist");
+        }
         Responder responderToDispatch = responderRepository.getReferenceById(id);
-        responderToDispatch.setStatus("Dispatched");
+        /*if (!responderToDispatch.getStatus().equals("available")) {
+            throw new ResponderNotAvailableException("Responder not available at this moment");
+        }*/
+        responderToDispatch.setStatus(status);
         responderToDispatch.setLongitude(longitude);
         responderToDispatch.setLatitude(latitude);
         responderRepository.save(responderToDispatch);
