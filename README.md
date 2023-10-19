@@ -23,11 +23,15 @@ Part 4:
     GitHub Repository Link: https://github.com/YF916/COMSW4156-ASE-project
 
 **Style Checker:**
+<img width="1512" alt="style-checker" src="https://github.com/YF916/COMSW4156-ASE-project/assets/144531191/78b1c561-0bbd-4109-9362-b01fafe81d10">
 
 
 **API Testing:**
 
 All API entry points are tested using postman: https://www.postman.com/yf916/workspace/ase-api-testing/collection/30513862-0c556156-e066-42fa-8966-b0a5aebeb2d9?action=share&creator=30513862
+
+<img width="1624" alt="api-testing" src="https://github.com/YF916/COMSW4156-ASE-project/assets/144531191/9b71dedb-bdd3-4b26-aaa3-518ca0b555c7">
+
 
 **Unit Testing:**
 
@@ -183,7 +187,7 @@ Example Request Body:
 #### Example
 
 ```http
-Get http://localhost:8080/responder/search?rating=0.0
+GET http://localhost:8080/responder/search?rating=0.0
 ```
 #### Response
 
