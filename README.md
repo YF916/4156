@@ -29,6 +29,17 @@ Then create a new database by running the following commands at the mysql prompt
 `mysql> create user 'springuser'@'%' identified by 'ThePassword';` -- Creates the user
 
 `mysql> grant all on db_example.* to 'springuser'@'%';` -- Gives all privileges to the new user on the newly created database
+### Build and run the application
+
+in your application.properties file:
+``` code spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:mysql://${MYSQL_HOST:localhost}:3306/db_example
+spring.datasource.username=springuser
+spring.datasource.password=ThePassword
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#spring.jpa.show-sql: true
+```
+Finally build using maven ```mvn clean install``` and run the application from your IDE by running the main application class ```DemotestApplication.java```.  (we used intellij)
 
 **Style Checker:**
 <img width="1512" alt="style-checker" src="https://github.com/YF916/COMSW4156-ASE-project/assets/144531191/78b1c561-0bbd-4109-9362-b01fafe81d10">
@@ -57,15 +68,15 @@ serving as a routing mechanism that matches event requests to the most suitable 
 EDS ensures swift request processing, offers clear endpoints for seamless integration, manages both dispatch and historical data retrieval.
 
 
-## User Management Base URL
+## Account Management API
 
-The base URL for **user management** is `http://localhost:8080/user`.
+The base URL for **Account management** is `http://localhost:8080/user`.
 
 ### Authentication
 
 These APIs do not require authentication.
 
-### 1. Add a new user
+### 1. Add a new user account
 
 #### Endpoint
 
@@ -75,7 +86,7 @@ These APIs do not require authentication.
 #### Parameters
 
 - **`name` (required)**: The client's preferred name
-- **`phone` (optional)**: The client's mobile phone number
+- **`phone` (required)**: The client's mobile phone number
 
 #### Example
 
@@ -97,7 +108,7 @@ Example Request Body:
   - **Example output**: "Saved"
 
 
-### 2. Find all users
+### 2. Find all users account
 
 #### Endpoint
 
@@ -138,7 +149,7 @@ Example Request Body:
 ]
 ```
 
-## Responder Management Base URL
+## Responder Management API 
 
 The base URL for **responder management** is `http://localhost:8080/responder`.
 
