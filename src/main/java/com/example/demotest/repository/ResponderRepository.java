@@ -8,4 +8,6 @@ import java.util.List;
 public interface ResponderRepository extends JpaRepository<Responder, Integer> {
     List<Responder> findAllByRatingGreaterThanAndStatusEqualsOrderByRatingDesc(double rating, String status);
     List<Responder> findAllByStatusEquals(String status);
+
+    Iterable<Responder> findByLatitudeBetweenAndLongitudeBetween(Double minLat, Double maxLat, Double minLon, Double maxLon);
 }

@@ -40,7 +40,7 @@ public class DispatchController {
     }
 
     @RequestMapping(path = "/search_distance")
-    public @ResponseBody Iterable<Responder> getRespondersBYRadius(@RequestParam Double latitude,
+    public @ResponseBody Iterable<Responder> getRespondersBYRadius (@RequestParam Double latitude,
                                                                    @RequestParam Double longitude,
                                                                    @RequestParam Double radius) {
         Double minLat = latitude - radius;

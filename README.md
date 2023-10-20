@@ -122,19 +122,19 @@ Example Request Body:
     - **HTTP Status Code**: 200 OK
     - **Content-Type**: application/json
     - **Example output**:
-```json{
-    [
-        {
-            "id": 1,
-            "name": "Amy",
-            "phone": "12345678"
-        },
-        {
-            "id": 2,
-            "name": "Frank",
-            "phone": "1234567"
-        },
-   ]
+```json
+[
+    {
+      "id": 1,
+      "name": "Amy",
+      "phone": "12345678"
+    },
+    {
+      "id": 2,
+      "name": "Frank",
+      "phone": "1234567"
+    }
+]
 ```
 
 ## Responder Management Base URL
@@ -187,7 +187,7 @@ Example Request Body:
 #### Endpoint
 
 - **URL**: `/search`
-- **Method**: Get
+- **Method**: GET
 
 #### Parameters
 - **`rating` (optional)**: return only responder with rating larger than this value
@@ -203,8 +203,8 @@ GET http://localhost:8080/responder/search?rating=0.0
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: application/json
   - **Example output**:
-```json{
-    [
+```json
+[
     {
         "id": 5,
         "name": "responder1",
@@ -235,7 +235,52 @@ GET http://localhost:8080/responder/search?rating=0.0
 ]
 ```
 
-### 3. Dispatch a responder 
+### 3. Search for available responders within a geolocation's radius
+
+#### Endpoint
+
+- **URL**: `/search_distance`
+- **Method**: GET
+
+#### Parameters
+- **`latitude` (required)**: latitude of the client
+- **`longitude` (required)**: longitude of the client
+- **`radius` (required)**: responders should be within this radius
+
+#### Example
+
+```http
+GET http://localhost:8080/responder/search_distance
+```
+Example Request Body:
+```json
+{
+  "latitude": "51.0",
+  "longitude": "82.0",
+  "radius": 3
+}
+```
+#### Response
+
+- **Success Response**:
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: application/json
+  - **Example output**:
+```json
+[
+    {
+        "id": 7,
+        "name": "testResponder2",
+        "phone": "9999999999",
+        "latitude": 50.71,
+        "longitude": 80.82,
+        "status": "available",
+        "rating": 10.0
+    }
+]
+```
+
+### 4. Dispatch a responder 
 
 #### Endpoint
 
@@ -273,12 +318,12 @@ Example Request Body:
   - **Content-Type**: Sting
   - **Example output**: "Dispatched" or "Responder does not exist"/"Responder not available at this moment"
 
-### 4. Recommend a responder with the user's highest previous rate 
+### 5. Recommend a responder with the user's highest previous rate 
 
 #### Endpoint
 
 - **URL**: `/recommend/rate`
-- **Method**: Get
+- **Method**: GET
 
 #### Parameters
 - **`id` (required)**: The caller's userid
@@ -301,8 +346,8 @@ Example Request Body:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: application/json
   - **Example output**: 
-  - ```json
-    {
+```json
+{
     "id": 2,
     "name": "Second",
     "phone": "2345678",
@@ -310,15 +355,15 @@ Example Request Body:
     "longitude": 77.0,
     "status": "available",
     "rating": null
-    }
-    ```
+}
+```
 
-### 5. Recommend responder with the highest frequency in user's call history
+### 6. Recommend responder with the highest frequency in user's call history
 
 #### Endpoint
 
 - **URL**: `/recommend/frequency`
-- **Method**: Get
+- **Method**: GET
 
 #### Parameters
 
@@ -341,8 +386,8 @@ Example Request Body:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: application/json
   - **Example output**:
-  - ```json
-    {
+```json
+{
     "id": 1,
     "name": "First",
     "phone": "1234567",
@@ -350,8 +395,8 @@ Example Request Body:
     "longitude": 74.006,
     "status": "available",
     "rating": null
-    }
-    ```
+}
+```
 
 
 ## Dispatch History Management Base URL
@@ -532,8 +577,8 @@ Example Request Body:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: application/json
   - **Example output**:
-```json{
-    [
+```json
+[
     {
         "id": 6,
         "caller": {
