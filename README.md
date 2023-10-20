@@ -38,7 +38,8 @@ Then create a new database by running the following commands at the mysql prompt
 
 All API entry points are tested using postman: https://www.postman.com/yf916/workspace/ase-api-testing/collection/30513862-0c556156-e066-42fa-8966-b0a5aebeb2d9?action=share&creator=30513862
 
-<img width="1624" alt="api-testing" src="https://github.com/YF916/COMSW4156-ASE-project/assets/144531191/9b71dedb-bdd3-4b26-aaa3-518ca0b555c7">
+<img width="1624" alt="api-testing-all" src="https://github.com/YF916/COMSW4156-ASE-project/assets/144531191/c5d2a20e-ebb4-417f-aa75-6bd1fcb40bff">
+
 
 
 **Unit Testing:**
