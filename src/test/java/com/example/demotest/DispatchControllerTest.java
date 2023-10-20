@@ -37,6 +37,18 @@ public class DispatchControllerTest {
     @Captor
     private ArgumentCaptor<Responder> responderCaptor;
 
+    @Captor
+    private ArgumentCaptor<Double> minLatCaptor;
+
+    @Captor
+    private ArgumentCaptor<Double> maxLatCaptor;
+
+    @Captor
+    private ArgumentCaptor<Double> minLonCaptor;
+
+    @Captor
+    private ArgumentCaptor<Double> maxLonCaptor;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.openMocks(this);
@@ -95,6 +107,31 @@ public class DispatchControllerTest {
         assertEquals(2, ((List<Responder>) responders).size());
         verify(responderRepository, times(1)).findAll();*/
     }
+    @Test
+    public void testGetRespondersByRadius() {
+        Responder responder = new Responder();
+        List<Responder> mockResponders = Arrays.asList(responder);
+        double latitude = 40.0;
+        double longitude = 60.0;
+        double radius = 5;
+
+        when(responderRepository.findByLatitudeBetweenAndLongitudeBetween(anyDouble(), anyDouble(), anyDouble(), anyDouble()))
+                .thenReturn(mockResponders);
+
+        Iterable<Responder> responders = dispatchController.getRespondersBYRadius(latitude, longitude, radius);
+
+        assertEquals(mockResponders, responders, "The returned responders do not match the expected ones.");
+
+        // Verify and capture that the repository method was called with the correct parameters
+        verify(responderRepository).findByLatitudeBetweenAndLongitudeBetween(minLatCaptor.capture(), maxLatCaptor.capture(),
+                minLonCaptor.capture(), maxLonCaptor.capture());
+
+        assertEquals(latitude - radius, minLatCaptor.getValue(), "Incorrect minimum latitude.");
+        assertEquals(latitude + radius, maxLatCaptor.getValue(), "Incorrect maximum latitude.");
+        assertEquals(longitude - radius, minLonCaptor.getValue(), "Incorrect minimum longitude.");
+        assertEquals(longitude + radius, maxLonCaptor.getValue(), "Incorrect maximum longitude.");
+    }
+
 
 }
 

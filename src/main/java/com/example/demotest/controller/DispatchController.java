@@ -39,6 +39,18 @@ public class DispatchController {
         return responderRepository.findAllByRatingGreaterThanAndStatusEqualsOrderByRatingDesc(rating, "available");
     }
 
+    @RequestMapping(path = "/search_distance")
+    public @ResponseBody Iterable<Responder> getRespondersBYRadius(@RequestParam Double latitude,
+                                                                   @RequestParam Double longitude,
+                                                                   @RequestParam Double radius) {
+        Double minLat = latitude - radius;
+        Double maxLat = latitude + radius;
+        Double minLon = longitude - radius;
+        Double maxLon = longitude + radius;
+
+        return responderRepository.findByLatitudeBetweenAndLongitudeBetween(minLat, maxLat, minLon, maxLon);
+    }
+
     @PostMapping(path = "/dispatch") // dispatch a specific responder by id
     public @ResponseBody String dispatchResponder(@RequestParam Integer id, @RequestParam String status,
                                                    @RequestParam Double latitude, @RequestParam Double longitude) {
