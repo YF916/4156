@@ -55,7 +55,7 @@ All API entry points are tested using postman: https://www.postman.com/yf916/wor
 
 **Unit Testing:**
 
-All unit testing is stored in `/COMSW4156-ASE-project/src/test/java/com/example/demotest`
+All unit testing is stored [here](https://github.com/YF916/COMSW4156-ASE-project/tree/main/src/test/java/com/example/demotest).
 
 # Event Dispatch Service API Documentation
 
