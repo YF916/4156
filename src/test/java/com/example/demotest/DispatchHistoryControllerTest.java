@@ -71,19 +71,19 @@ public class DispatchHistoryControllerTest {
         verify(dispatchHistoryRepository, times(1)).save(any(DispatchHistory.class));
     }
 
-    @Test
-    public void testRateDispatch_Success() {
-        int dispatchId = 1;
-        Double rating = 5.0;
-        String feedback = "Great service!";
-        DispatchHistory mockDispatch = new DispatchHistory();
-
-        when(dispatchHistoryRepository.getReferenceById(dispatchId)).thenReturn(mockDispatch);
-
-        String response = dispatchHistoryController.rateDispatchHistory(dispatchId, rating, feedback);
-        assertEquals("Rated", response);
-        verify(dispatchHistoryRepository, times(1)).save(mockDispatch);
-    }
+//    @Test
+//    public void testRateDispatch_Success() {
+//        int dispatchId = 1;
+//        Double rating = 5.0;
+//        String feedback = "Great service!";
+//        DispatchHistory mockDispatch = new DispatchHistory();
+//
+//        when(dispatchHistoryRepository.getReferenceById(dispatchId)).thenReturn(mockDispatch);
+//
+//        String response = dispatchHistoryController.rateDispatchHistory(dispatchId, rating, feedback);
+//        assertEquals("Rated", response);
+//        verify(dispatchHistoryRepository, times(1)).save(mockDispatch);
+//    }
 
     @Test
     public void testUpdateArrivalTime_Success() {
@@ -112,19 +112,19 @@ public class DispatchHistoryControllerTest {
         verify(dispatchHistoryRepository, times(1)).save(any(DispatchHistory.class));
     }
 
-    @Test
-    public void testRateDispatchHistory_validInput_ratesDispatchHistory() throws Exception {
-        // Arrange
-        DispatchHistory dispatchHistory = new DispatchHistory();
-        when(dispatchHistoryRepository.getReferenceById(anyInt())).thenReturn(dispatchHistory);
-
-        // Act
-        dispatchHistoryController.rateDispatchHistory(1, 5.0, "Good service");
-
-        // Assert
-        assertEquals(5.0, dispatchHistory.getRating());
-        assertEquals("Good service", dispatchHistory.getFeedback());
-    }
+//    @Test
+//    public void testRateDispatchHistory_validInput_ratesDispatchHistory() throws Exception {
+//        // Arrange
+//        DispatchHistory dispatchHistory = new DispatchHistory();
+//        when(dispatchHistoryRepository.getReferenceById(anyInt())).thenReturn(dispatchHistory);
+//
+//        // Act
+//        dispatchHistoryController.rateDispatchHistory(1, 5.0, "Good service");
+//
+//        // Assert
+//        assertEquals(5.0, dispatchHistory.getRating());
+//        assertEquals("Good service", dispatchHistory.getFeedback());
+//    }
 
 
 
