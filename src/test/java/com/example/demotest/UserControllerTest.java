@@ -140,9 +140,56 @@ public class UserControllerTest {
         verify(userRepository, times(1)).save(user);
     }
 
-    // Additional test cases...
+    @Test
+    public void testAddNewUser_Failure() {
+        User user = new User();
+        user.setName("John Doe");
+        user.setPhone("1234567890");
 
-    // Remember to revise other test methods in a similar way
+        when(userRepository.save(user)).thenThrow(new RuntimeException("DB error"));
+
+        assertThrows(RuntimeException.class, () -> userController.addNewUser(user));
+        verify(userRepository, times(1)).save(user);
+    }
+
+    @Test
+    public void testAddNewUser_MissingInfo() {
+        User user = new User(); // Not setting any information on the user.
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            userController.addNewUser(user);
+        });
+
+        // check that save was never called due to invalid input.
+        verify(userRepository, times(0)).save(any(User.class));
+    }
+
+    @Test
+    public void testGetAllUsers_Success() {
+        List<User> users = new ArrayList<>();
+
+        User jane = new User();
+        jane.setName("Jane Doe");
+        jane.setPhone("1234567890");
+        users.add(jane);
+
+        User john = new User();
+        john.setName("John Smith");
+        john.setPhone("0987654321");
+        users.add(john);
+
+        when(userRepository.findAll()).thenReturn(users);
+        Iterable<User> response = userController.getAllUsers();
+        assertIterableEquals(users, response);
+        verify(userRepository, times(1)).findAll();
+    }
+    @Test
+    public void testAddNewUser_NullUser() {
+        Exception exception = assertThrows(Exception.class, () -> {
+            userController.addNewUser(null);
+        });
+        verify(userRepository, times(0)).save(any(User.class));
+    }
+
 }
 
 
