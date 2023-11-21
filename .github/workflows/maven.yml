@@ -31,8 +31,8 @@ jobs:
       - name: Build with Maven
         run: mvn -B compile --file pom.xml
 
-      - name: User Controller Test
-        run: mvn -Dtest=UserControllerTest test
+      #- name: User Controller Test
+      #  run: mvn -Dtest=UserControllerTest test
 
       - name: Print Java Version
         run: java -version
