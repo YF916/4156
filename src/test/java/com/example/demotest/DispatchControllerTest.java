@@ -4,9 +4,11 @@ package com.example.demotest;
 import com.example.demotest.controller.DispatchController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Arrays;
@@ -25,7 +27,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class DispatchControllerTest {
 
     @InjectMocks
@@ -54,7 +56,7 @@ public class DispatchControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    /*@Test
+    @Test
     public void testAddNewResponder_Success() {
         Responder responder = new Responder();
         responder.setName("John Smith");
@@ -91,22 +93,22 @@ public class DispatchControllerTest {
         verify(responderRepository, times(1)).save(responder);
     }
 
-    @Test
-    public void testGetAllResponders() {
-        Responder responder1 = new Responder();
-        responder1.setName("John Smith");
-        Responder responder2 = new Responder();
-        responder2.setName("Jane Doe");
-
-        List<Responder> mockResponders = Arrays.asList(responder1, responder2);
-
-        when(responderRepository.findAll()).thenReturn(mockResponders);
-
-        Iterable<Responder> responders = dispatchController.getAllResponders();
-        assertNotNull(responders);
-        assertEquals(2, ((List<Responder>) responders).size());
-        verify(responderRepository, times(1)).findAll();
-    }
+//    @Test
+//    public void testGetAllResponders() {
+//        Responder responder1 = new Responder();
+//        responder1.setName("John Smith");
+//        Responder responder2 = new Responder();
+//        responder2.setName("Jane Doe");
+//
+//        List<Responder> mockResponders = Arrays.asList(responder1, responder2);
+//
+//        when(responderRepository.findAll()).thenReturn(mockResponders);
+//
+//        Iterable<Responder> responders = dispatchController.getAllResponders();
+//        assertNotNull(responders);
+//        assertEquals(2, ((List<Responder>) responders).size());
+//        verify(responderRepository, times(1)).findAll();
+//    }
     @Test
     public void testGetRespondersByRadius() {
         Responder responder = new Responder();
@@ -130,7 +132,7 @@ public class DispatchControllerTest {
         assertEquals(latitude + radius, maxLatCaptor.getValue(), "Incorrect maximum latitude.");
         assertEquals(longitude - radius, minLonCaptor.getValue(), "Incorrect minimum longitude.");
         assertEquals(longitude + radius, maxLonCaptor.getValue(), "Incorrect maximum longitude.");
-    }*/
+    }
 
 
 }

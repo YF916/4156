@@ -5,9 +5,11 @@ import com.example.demotest.model.User;
 import com.example.demotest.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
     @InjectMocks
@@ -30,7 +32,7 @@ public class UserControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    /*@Test
+    @Test
     public void testAddNewUser_Success() {
         User user = new User();
         user.setName("John Doe");
@@ -90,6 +92,6 @@ public class UserControllerTest {
             userController.addNewUser(null);
         });
         verify(userRepository, times(0)).save(any(User.class));
-    }*/
+    }
 }
 
