@@ -16,20 +16,50 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      - uses: actions/checkout@v3
 
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B compile --file pom.xml
+
+      - name: User Controller Unit Test
+        run: mvn -Dtest=UserControllerTest test
+
+      - name: Dispatch Controller Unit Test
+        run: mvn -Dtest=DispatchControllerTest test
+
+      - name: Dispatch History Controller Unit Test
+        run: mvn -Dtest=DispatchHistoryControllerTest test
+
+      - name: Run JaCoCo
+        run: mvn test jacoco:report
+
+#      - name: Upload coverage to Coveralls
+#        uses: coverallsapp/github-action@master
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          path-to-lcov: ./target/site/jacoco/jacoco.xml
+
+      #      - name: Upload coverage to Codecov
+      #        uses: codecov/codecov-action@v2
+      #        with:
+      #            files: ./target/site/jacoco/jacoco.xml
+      #            fail_ci_if_error: true
+
+#      - name: Archive JaCoCo Reports
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: jacoco-reports
+#          path: target/site/jacoco/
+
+      #- name: Update dependency graph
+      #  uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
