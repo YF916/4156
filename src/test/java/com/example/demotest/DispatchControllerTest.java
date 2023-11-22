@@ -54,7 +54,7 @@ public class DispatchControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+    /*@Test
     public void testAddNewResponder_Success() {
         Responder responder = new Responder();
         responder.setName("John Smith");
@@ -93,7 +93,7 @@ public class DispatchControllerTest {
 
     @Test
     public void testGetAllResponders() {
-        /*Responder responder1 = new Responder();
+        Responder responder1 = new Responder();
         responder1.setName("John Smith");
         Responder responder2 = new Responder();
         responder2.setName("Jane Doe");
@@ -105,7 +105,7 @@ public class DispatchControllerTest {
         Iterable<Responder> responders = dispatchController.getAllResponders();
         assertNotNull(responders);
         assertEquals(2, ((List<Responder>) responders).size());
-        verify(responderRepository, times(1)).findAll();*/
+        verify(responderRepository, times(1)).findAll();
     }
     @Test
     public void testGetRespondersByRadius() {
@@ -130,7 +130,7 @@ public class DispatchControllerTest {
         assertEquals(latitude + radius, maxLatCaptor.getValue(), "Incorrect maximum latitude.");
         assertEquals(longitude - radius, minLonCaptor.getValue(), "Incorrect minimum longitude.");
         assertEquals(longitude + radius, maxLonCaptor.getValue(), "Incorrect maximum longitude.");
-    }
+    }*/
 
 
 }

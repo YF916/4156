@@ -52,12 +52,12 @@ public class DispatchController {
     }
 
     @PostMapping(path = "/dispatch") // dispatch a specific responder by id
-    public @ResponseBody String dispatchResponder(@RequestParam Integer id, @RequestParam String status,
+    public @ResponseBody String dispatchResponder(@RequestParam String name, @RequestParam String status,
                                                    @RequestParam Double latitude, @RequestParam Double longitude) {
-        if (!responderRepository.existsById(id)) {
+        if (!responderRepository.existsById(name)) {
             throw new ResponderNotAvailableException("Responder does not exist");
         }
-        Responder responderToDispatch = responderRepository.getReferenceById(id);
+        Responder responderToDispatch = responderRepository.getReferenceById(name);
         if (!responderToDispatch.getStatus().equals("available")) {
             throw new ResponderNotAvailableException("Responder not available at this moment");
         }
@@ -70,8 +70,8 @@ public class DispatchController {
 
     @GetMapping(path = "/recommend/rate") // called when the dispatch starts
     public @ResponseBody
-    Responder getRateRecommend(@RequestParam("user_id") Integer id) {
-        Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(id));
+    Responder getRateRecommend(@RequestParam("user_name") String name) {
+        Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(name));
         Responder responder = null;
         Double maxRate = -1.0;
         for (DispatchHistory history: allHistory) {
@@ -87,8 +87,8 @@ public class DispatchController {
 
     @GetMapping(path = "/recommend/frequency") // called when the dispatch starts
     public @ResponseBody
-    Responder getFreqRecommend(@RequestParam("user_id") Integer id) {
-        Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(id));
+    Responder getFreqRecommend(@RequestParam("user_name") String name) {
+        Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(name));
         ArrayList<Responder> responders = new ArrayList<>();
         for (DispatchHistory history: allHistory) {
             responders.add(history.getResponder());

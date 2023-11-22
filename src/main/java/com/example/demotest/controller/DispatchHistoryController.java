@@ -25,14 +25,14 @@ public class DispatchHistoryController {
 
     @PostMapping(path = "/start") // called when the dispatch starts
     public @ResponseBody String addNewDispatchHistory(
-            @RequestParam("user_id") int userId,
-            @RequestParam("responder_id") int responderId,
+            @RequestParam("user_name") String username,
+            @RequestParam("responder_name") String responderName,
             @RequestParam("start_time")
             @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime) {
         DispatchHistory history = new DispatchHistory();
-        history.setCaller(userRepository.getReferenceById(userId));
+        history.setCaller(userRepository.getReferenceById(username));
         history.setStartTime(startTime);
-        history.setResponder(responderRepository.getReferenceById(responderId));
+        history.setResponder(responderRepository.getReferenceById(responderName));
         dispatchHistoryRepository.save(history);
         return "Saved";
     }
@@ -46,12 +46,13 @@ public class DispatchHistoryController {
         if (feedback != null) {
             dispatchToRate.setFeedback(feedback);
         }
-        Responder responder = responderRepository.getReferenceById(dispatchToRate.getResponder().getId());
+        Responder responder = responderRepository.getReferenceById(dispatchToRate.getResponder().getName());
         // rolling average
         responder.setRating(responder.getRating() * 0.9 + rating * 0.1);
         dispatchHistoryRepository.save(dispatchToRate);
         return "Rated";
     }
+
     @PostMapping(path = "/arrived") // called when dispatcher arrived on scene
     public @ResponseBody String updateArrivalTime(@RequestParam int id, @RequestParam("arrival_time")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrivalTime) {
         DispatchHistory dispatchToUpdate = dispatchHistoryRepository.getReferenceById(id);
@@ -73,11 +74,11 @@ public class DispatchHistoryController {
     @GetMapping(path = "/search")
     public @ResponseBody
     Iterable<DispatchHistory> searchDispatchHistory(@RequestParam(required = false) String filterBy,
-                                                 @RequestParam(required = false) Integer id) {
-        if ("Responder".equals(filterBy) && id != null) {
-            return dispatchHistoryRepository.findByResponder(responderRepository.getReferenceById(id));
-        } else if ("User".equals(filterBy) && id != null) {
-            return dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(id));
+                                                 @RequestParam(required = false) String name) {
+        if ("Responder".equals(filterBy) && name != null) {
+            return dispatchHistoryRepository.findByResponder(responderRepository.getReferenceById(name));
+        } else if ("User".equals(filterBy) && name != null) {
+            return dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(name));
         } else {
             return dispatchHistoryRepository.findAll();
         }

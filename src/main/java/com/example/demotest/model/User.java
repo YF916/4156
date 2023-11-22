@@ -6,21 +6,22 @@ import javax.persistence.*;
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
     @Column(name = "name")
     private String name;
     @Column(name = "phone")
     private String phone;
+    @Column(name = "password")
+    private String password;
 
-    public Integer getId() {
-        return id;
+    public String getPassword() {
+        return password;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setPassword(String password) {
+        this.password = password;
     }
+
+
 
     public String getName() {
         return name;

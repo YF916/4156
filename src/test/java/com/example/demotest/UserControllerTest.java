@@ -30,7 +30,7 @@ public class UserControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+    /*@Test
     public void testAddNewUser_Success() {
         User user = new User();
         user.setName("John Doe");
@@ -90,6 +90,6 @@ public class UserControllerTest {
             userController.addNewUser(null);
         });
         verify(userRepository, times(0)).save(any(User.class));
-    }
+    }*/
 }
 

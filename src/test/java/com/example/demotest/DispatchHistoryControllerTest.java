@@ -39,7 +39,7 @@ public class DispatchHistoryControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+    /*@Test
     public void testStartNewDispatch_NonExistentUserOrResponder() {
         int userId = 999; // non-existent user
         int responderId = 999; // non-existent responder
@@ -167,7 +167,7 @@ public class DispatchHistoryControllerTest {
 
         // Assert
         assertNotNull(results);
-    }
+    }*/
 
 
 

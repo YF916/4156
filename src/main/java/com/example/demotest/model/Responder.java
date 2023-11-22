@@ -11,10 +11,6 @@ import javax.persistence.*;
 @Table(name = "Responder")
 public class Responder {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
     @Column(name = "name")
     private String name;
 
@@ -35,13 +31,16 @@ public class Responder {
     @Column(name = "rating")
     private Double rating;
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getPassword() {
+        return password;
     }
 
-    public Integer getId() {
-        return id;
+    public void setPassword(String password) {
+        this.password = password;
     }
+
+    @Column(name = "password")
+    private String password;
 
     public String getPhone() {
         return phone;
