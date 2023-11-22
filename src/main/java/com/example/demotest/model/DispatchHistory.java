@@ -29,6 +29,8 @@ public class DispatchHistory {
     private String feedback;
     @Column(name = "status")
     private String status;
+    @Column(name = "emergency_level")
+    private String emergencyLevel;
 
 
     public Integer getId() {
