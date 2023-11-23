@@ -14,5 +14,6 @@ public interface DispatchHistoryRepository extends JpaRepository<DispatchHistory
     List<DispatchHistory> findByCallerAndStatusNot(User user, String status);
     List<DispatchHistory> findByResponder(Responder responder);
     List<DispatchHistory> findByCaller(User user);
+    boolean existsByIdAndStatusNotAndCaller(Integer id, String status,User caller);
     List<DispatchHistory> findAllByLatitudeBetweenAndLongitudeBetweenAndStatusEqualsOrderByEmergencyLevel(Double minLat, Double maxLat, Double minLon, Double maxLon,String status);
 }

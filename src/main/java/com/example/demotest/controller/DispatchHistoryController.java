@@ -1,5 +1,6 @@
 package com.example.demotest.controller;
 
+import com.example.demotest.exceptions.InvalidRequestException;
 import com.example.demotest.model.DispatchHistory;
 import com.example.demotest.model.Responder;
 import com.example.demotest.repository.DispatchHistoryRepository;
@@ -30,10 +31,16 @@ public class DispatchHistoryController {
 
     // when user want to give a feedback
     @PostMapping(path = "/rate")
-    public @ResponseBody String rateDispatchHistory(@RequestParam int id,
+    public @ResponseBody String rateDispatchHistory(@AuthenticationPrincipal UserDetails userDetails, @RequestParam int id,
                                                     @RequestParam Double rating,
                                                     @RequestParam(required = false) String feedback) {
+        if (!dispatchHistoryRepository.existsByIdAndStatusNotAndCaller(id,"pending",userRepository.getReferenceById(userDetails.getUsername()))){
+            throw new InvalidRequestException("request with id " + id + " does not exist for this user or have not been accepted by a responder yet");
+        }
         DispatchHistory dispatchToRate = dispatchHistoryRepository.getReferenceById(id);
+        if (dispatchToRate.getRating()!=null){
+            throw new InvalidRequestException("this request has already been rated");
+        }
         dispatchToRate.setRating(rating);
         if (feedback != null) {
             dispatchToRate.setFeedback(feedback);
@@ -77,5 +84,4 @@ public class DispatchHistoryController {
             throw new AccessDeniedException("Access is denied");
         }
     }
-
 }
