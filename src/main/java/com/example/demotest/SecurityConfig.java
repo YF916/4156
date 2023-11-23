@@ -19,15 +19,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-    @Autowired
     private final CustomAuthenticationProvider customAuthenticationProvider;
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService,CustomAuthenticationProvider customAuthenticationProvider) {
-        this.userDetailsService=userDetailsService;
+    public SecurityConfig(CustomAuthenticationProvider customAuthenticationProvider) {
         this.customAuthenticationProvider = customAuthenticationProvider;
     }
-
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -35,6 +30,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/register/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/authenticate/**").permitAll()
+                .antMatchers("/responder/**").hasAuthority("responder")
+                .antMatchers("/user/**").hasAuthority("user")
                 .anyRequest().authenticated()
                 .and()
                 .csrf()

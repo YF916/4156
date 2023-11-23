@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
-    @ExceptionHandler(ResponderNotAvailableException.class)
-    public final ResponseEntity<String> handleResponderNotAvailableExceptions(Exception ex) {
+    @ExceptionHandler(RequestAlreadyHandledException.class)
+    public final ResponseEntity<String> handleRequestAlreadyHandledException(Exception ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
     @ExceptionHandler(UserAlreadyExistException.class)

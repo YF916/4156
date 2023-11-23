@@ -1,12 +1,14 @@
 package com.example.demotest.controller;
 
-import com.example.demotest.exceptions.ResponderNotAvailableException;
+import com.example.demotest.exceptions.RequestAlreadyHandledException;
 import com.example.demotest.model.DispatchHistory;
 import com.example.demotest.model.Responder;
 import com.example.demotest.repository.ResponderRepository;
 import com.example.demotest.repository.DispatchHistoryRepository;
 import com.example.demotest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,22 +27,13 @@ public class DispatchController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping(path = "/add")
-    public @ResponseBody
-    String addNewResponder(Responder responder) {
-        responder.setRating(10.0); //give the responder an initial rating of 10
-        responder.setStatus("available");
-        responderRepository.save(responder);
-        return "Saved";
+    @RequestMapping(path = "/search")//search for all active requests, sorted by emergency level
+    public @ResponseBody Iterable<DispatchHistory> getAllRequests() {
+        return dispatchHistoryRepository.findAllByStatusOrderByEmergencyLevelAsc("pending");
     }
 
-    @RequestMapping(path = "/search")//search for all available responders, optionally sort by rating
-    public @ResponseBody Iterable<Responder> getAllResponders(@RequestParam(required = false, defaultValue = "0.0") Double rating) {
-        return responderRepository.findAllByRatingGreaterThanAndStatusEqualsOrderByRatingDesc(rating, "available");
-    }
-
-    @RequestMapping(path = "/search_distance")
-    public @ResponseBody Iterable<Responder> getRespondersBYRadius (@RequestParam Double latitude,
+    @RequestMapping(path = "/search_distance")//search for all active requests within certain distance, order by emergency level
+    public @ResponseBody Iterable<DispatchHistory> getRequestByRadius (@RequestParam Double latitude,
                                                                    @RequestParam Double longitude,
                                                                    @RequestParam Double radius) {
         Double minLat = latitude - radius;
@@ -48,24 +41,21 @@ public class DispatchController {
         Double minLon = longitude - radius;
         Double maxLon = longitude + radius;
 
-        return responderRepository.findByLatitudeBetweenAndLongitudeBetween(minLat, maxLat, minLon, maxLon);
+        return dispatchHistoryRepository.findAllByLatitudeBetweenAndLongitudeBetweenAndStatusEqualsOrderByEmergencyLevel(minLat, maxLat, minLon, maxLon,"pending");
     }
 
-    @PostMapping(path = "/dispatch") // dispatch a specific responder by id
-    public @ResponseBody String dispatchResponder(@RequestParam String name, @RequestParam String status,
-                                                   @RequestParam Double latitude, @RequestParam Double longitude) {
-        if (!responderRepository.existsById(name)) {
-            throw new ResponderNotAvailableException("Responder does not exist");
+    @PostMapping(path = "/accept/{id}") // responder accepts a request
+    public @ResponseBody String dispatchResponder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Integer id) {
+        String username = userDetails.getUsername();
+        Responder responderToDispatch = responderRepository.getReferenceById(username);
+        DispatchHistory request = dispatchHistoryRepository.getReferenceById(id);
+        if (!request.getStatus().equals("pending")) {
+            throw new RequestAlreadyHandledException("Request is already handled");
         }
-        Responder responderToDispatch = responderRepository.getReferenceById(name);
-        if (!responderToDispatch.getStatus().equals("available")) {
-            throw new ResponderNotAvailableException("Responder not available at this moment");
-        }
-        responderToDispatch.setStatus(status);
-        responderToDispatch.setLongitude(longitude);
-        responderToDispatch.setLatitude(latitude);
-        responderRepository.save(responderToDispatch);
-        return "Dispatched";
+        request.setStatus("dispatched");
+        request.setResponder(responderToDispatch);
+        dispatchHistoryRepository.save(request);
+        return "Accepted";
     }
 
     @GetMapping(path = "/recommend/rate") // called when the dispatch starts

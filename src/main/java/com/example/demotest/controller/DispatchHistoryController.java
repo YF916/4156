@@ -7,6 +7,11 @@ import com.example.demotest.repository.ResponderRepository;
 import com.example.demotest.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,19 +28,6 @@ public class DispatchHistoryController {
     @Autowired
     private ResponderRepository responderRepository;
 
-    @PostMapping(path = "/start") // called when the dispatch starts
-    public @ResponseBody String addNewDispatchHistory(
-            @RequestParam("user_name") String username,
-            @RequestParam("responder_name") String responderName,
-            @RequestParam("start_time")
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime) {
-        DispatchHistory history = new DispatchHistory();
-        history.setCaller(userRepository.getReferenceById(username));
-        history.setStartTime(startTime);
-        history.setResponder(responderRepository.getReferenceById(responderName));
-        dispatchHistoryRepository.save(history);
-        return "Saved";
-    }
     // when user want to give a feedback
     @PostMapping(path = "/rate")
     public @ResponseBody String rateDispatchHistory(@RequestParam int id,
@@ -57,11 +49,12 @@ public class DispatchHistoryController {
     public @ResponseBody String updateArrivalTime(@RequestParam int id, @RequestParam("arrival_time")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrivalTime) {
         DispatchHistory dispatchToUpdate = dispatchHistoryRepository.getReferenceById(id);
         dispatchToUpdate.setArrivalTime(arrivalTime);
+        dispatchToUpdate.setStatus("arrived");
         dispatchHistoryRepository.save(dispatchToUpdate);
         return "Arrived";
     }
 
-    // called when dispatcher arrived at scene
+    // called when request is finished
     @PostMapping(path = "/finished")
     public @ResponseBody String finishDispatch(@RequestParam int id) {
         DispatchHistory dispatchToUpdate = dispatchHistoryRepository.getReferenceById(id);
@@ -73,14 +66,15 @@ public class DispatchHistoryController {
     // search dispatch history by user id/ responder id or return all dispatch history
     @GetMapping(path = "/search")
     public @ResponseBody
-    Iterable<DispatchHistory> searchDispatchHistory(@RequestParam(required = false) String filterBy,
-                                                 @RequestParam(required = false) String name) {
-        if ("Responder".equals(filterBy) && name != null) {
-            return dispatchHistoryRepository.findByResponder(responderRepository.getReferenceById(name));
-        } else if ("User".equals(filterBy) && name != null) {
-            return dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(name));
+    Iterable<DispatchHistory> searchDispatchHistory(@AuthenticationPrincipal UserDetails userDetails,
+                                                    @RequestParam(required = true) String status) {
+        String username = userDetails.getUsername();
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("responder"))){
+            return dispatchHistoryRepository.findByResponderAndStatus(responderRepository.getReferenceById(username),status);
+        } else if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("user"))) {
+            return dispatchHistoryRepository.findByCallerAndStatus(userRepository.getReferenceById(username),status);
         } else {
-            return dispatchHistoryRepository.findAll();
+            throw new AccessDeniedException("Access is denied");
         }
     }
 

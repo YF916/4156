@@ -5,6 +5,7 @@ import org.hibernate.search.annotations.Longitude;
 import org.hibernate.search.annotations.Spatial;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @Spatial
@@ -12,16 +13,25 @@ import javax.persistence.*;
 public class Responder {
     @Id
     @Column(name = "name")
+    @NotBlank
     private String name;
 
+    @NotBlank
+    @Pattern(regexp = "\\d+", message = "Phone number must contain only digits")
     @Column(name = "phone")
     private String phone;
 
-    @Latitude
+    @NotNull
+    @Longitude
+    @DecimalMin(value = "-90.0", inclusive = true, message = "invalid latitude")
+    @DecimalMax(value = "90.0", inclusive = true, message = "invalid latitude")
     @Column(name = "latitude")
     private Double latitude;
 
-    @Longitude
+    @NotNull
+    @Latitude
+    @DecimalMin(value = "-180.0", inclusive = true, message = "invalid latitude")
+    @DecimalMax(value = "180.0", inclusive = true, message = "invalid latitude")
     @Column(name = "longitude")
     private Double longitude;
 

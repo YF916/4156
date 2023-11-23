@@ -13,10 +13,10 @@ public class JwtUtil {
     private static final String SECRET_KEY = "COMS656finalprojectUserLoginServiceSecretKeyhopethisisenoughfor256bits"; // Replace with a secure key
     private static final long EXPIRATION_TIME = 86400000; // 24 hours
 
-    public String generateToken(String name, String password, String type) {
+    public String generateToken(String name, String password, String role) {
         return Jwts.builder()
                 .setSubject(name)
-                .claim("type", type)
+                .claim("role", role)
                 .claim("password", password)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))

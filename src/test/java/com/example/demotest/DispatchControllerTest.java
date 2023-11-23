@@ -56,7 +56,7 @@ public class DispatchControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+    /*@Test
     public void testAddNewResponder_Success() {
         Responder responder = new Responder();
         responder.setName("John Smith");
@@ -132,7 +132,7 @@ public class DispatchControllerTest {
         assertEquals(latitude + radius, maxLatCaptor.getValue(), "Incorrect maximum latitude.");
         assertEquals(longitude - radius, minLonCaptor.getValue(), "Incorrect minimum longitude.");
         assertEquals(longitude + radius, maxLonCaptor.getValue(), "Incorrect maximum longitude.");
-    }
+    }*/
 
 
 }

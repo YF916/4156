@@ -8,6 +8,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface DispatchHistoryRepository extends JpaRepository<DispatchHistory, Integer> {
+    List<DispatchHistory> findByResponderAndStatus(Responder responder, String status);
+    List<DispatchHistory> findAllByStatusOrderByEmergencyLevelAsc(String status);
+    List<DispatchHistory> findByCallerAndStatus(User user, String status);
+    List<DispatchHistory> findByCallerAndStatusNot(User user, String status);
     List<DispatchHistory> findByResponder(Responder responder);
     List<DispatchHistory> findByCaller(User user);
+    List<DispatchHistory> findAllByLatitudeBetweenAndLongitudeBetweenAndStatusEqualsOrderByEmergencyLevel(Double minLat, Double maxLat, Double minLon, Double maxLon,String status);
 }

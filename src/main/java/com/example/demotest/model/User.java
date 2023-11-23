@@ -2,14 +2,22 @@ package com.example.demotest.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity // This tells Hibernate to make a table out of this class
 public class User {
     @Id
     @Column(name = "name")
+    @NotBlank
     private String name;
+
+    @NotBlank
+    @Pattern(regexp = "\\d+", message = "Phone number must contain only digits")
     @Column(name = "phone")
     private String phone;
+
+    @NotBlank
     @Column(name = "password")
     private String password;
 
