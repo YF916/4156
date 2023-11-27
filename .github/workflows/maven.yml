@@ -37,9 +37,9 @@ jobs:
       - name: Register Controller Unit Test
         run: mvn -Dtest=RegisterControllerTest test
 
-#      - name: User Controller Unit Test
-#        run: mvn -Dtest=UserControllerTest test
-#
+      - name: User Controller Unit Test
+        run: mvn -Dtest=UserControllerTest test
+
 #      - name: Dispatch Controller Unit Test
 #        run: mvn -Dtest=DispatchControllerTest test
 #
