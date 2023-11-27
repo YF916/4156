@@ -31,8 +31,11 @@ jobs:
       - name: Build with Maven
         run: mvn -B compile --file pom.xml
 
-      - name: Controller Unit Test
-        run: mvn -Dtest=ControllerTest test
+      - name: Authentication Controller Unit Test
+        run: mvn -Dtest=AuthenticationControllerTest test
+
+      - name: Register Controller Unit Test
+        run: mvn -Dtest=RegisterControllerTest test
 
 #      - name: User Controller Unit Test
 #        run: mvn -Dtest=UserControllerTest test
