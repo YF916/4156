@@ -117,7 +117,7 @@ public class DispatchControllerTest {
         return history;
     }
 
-    @Test
+    /*@Test
     public void testGetRateRecommend_WithRatings() {
         List<DispatchHistory> histories = new ArrayList<>();
         Responder highestRatedResponder = new Responder(); // Assuming this is the correct way to instantiate a Responder
@@ -130,9 +130,9 @@ public class DispatchControllerTest {
         Responder result = dispatchController.getRateRecommend("userName");
 
         assertEquals("responder2", result.getName()); // Assuming getId exists
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testGetRateRecommend_NoRatings() {
         when(userRepository.getReferenceById("userName")).thenReturn(new User());
         when(dispatchHistoryRepository.findByCaller(any(User.class))).thenReturn(new ArrayList<>());
@@ -140,9 +140,9 @@ public class DispatchControllerTest {
         Responder result = dispatchController.getRateRecommend("userName");
 
         assertNull(result);
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testGetFreqRecommend_VariousFrequencies() {
         List<DispatchHistory> histories = new ArrayList<>();
         Responder mostFrequentResponder = new Responder(); // Assuming this is the correct way to instantiate a Responder
@@ -156,9 +156,9 @@ public class DispatchControllerTest {
         Responder result = dispatchController.getFreqRecommend("userName");
 
         assertEquals("responder1", result.getName()); // Assuming getId exists
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testGetFreqRecommend_NoHistory() {
         when(userRepository.getReferenceById("userName")).thenReturn(new User());
         when(dispatchHistoryRepository.findByCaller(any(User.class))).thenReturn(new ArrayList<>());
@@ -166,7 +166,7 @@ public class DispatchControllerTest {
         Responder result = dispatchController.getFreqRecommend("userName");
 
         assertNull(result);
-    }
+    }*/
 
 
 

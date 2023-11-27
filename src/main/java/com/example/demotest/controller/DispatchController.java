@@ -59,7 +59,7 @@ public class DispatchController {
         return "Accepted";
     }
 
-    @GetMapping(path = "/recommend/rate") // called when the dispatch starts
+    /*@GetMapping(path = "/recommend/rate") // called when the dispatch starts
     public @ResponseBody
     Responder getRateRecommend(@RequestParam("user_name") String name) {
         Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(name));
@@ -105,6 +105,6 @@ public class DispatchController {
         } catch (NullPointerException e) {
             return null;
         }
-    }
+    }*/
 
 }

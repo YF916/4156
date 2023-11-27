@@ -18,7 +18,6 @@ com/example/demotest/model/User.class
 com/example/demotest/exceptions/InvalidRequestException.class
 com/example/demotest/filter/JsonAuthenticationFilter.class
 com/example/demotest/DemotestApplication.class
-com/example/demotest/exceptions/ResponderNotAvailableException.class
 com/example/demotest/controller/UserController.class
 com/example/demotest/controller/RegisterController.class
 com/example/demotest/util/JwtUtil.class

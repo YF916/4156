@@ -109,19 +109,38 @@ public class DispatchHistory {
     }
 
     public Responder getResponder() {
-        return responder;
+        if (this.responder != null) {
+            // Return a defensive copy to prevent external modifications
+            return new Responder(this.responder);
+        } else {
+            return null;
+        }
     }
 
     public void setResponder(Responder responder) {
-        this.responder = responder;
+        if (responder != null) {
+            this.responder = new Responder(responder);
+        } else {
+            this.responder = null;
+        }
     }
 
     public User getCaller() {
-        return caller;
+        if (this.caller != null) {
+            // Return a defensive copy to prevent external modifications
+            return new User(this.caller);
+        } else {
+            return null;
+        }
     }
 
     public void setCaller(User caller) {
-        this.caller = caller;
+        if (caller != null) {
+            // Ensure the integrity of the relationship
+            this.caller = new User(caller);
+        } else {
+            this.caller = null;
+        }
     }
 
     public LocalDateTime getStartTime() {

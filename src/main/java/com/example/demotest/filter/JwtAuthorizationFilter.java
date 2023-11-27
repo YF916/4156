@@ -23,7 +23,7 @@ import java.util.List;
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final String SECRET_KEY ="COMS656finalprojectUserLoginServiceSecretKeyhopethisisenoughfor256bits"; // Replace with a secure secret key
+    private static final String SECRET_KEY ="COMS656finalprojectUserLoginServiceSecretKeyhopethisisenoughfor256bits"; // Replace with a secure secret key
 
     @Override
     protected void doFilterInternal(
