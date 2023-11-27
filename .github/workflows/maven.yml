@@ -46,19 +46,35 @@ jobs:
       - name: Dispatch History Controller Unit Test
         run: mvn -Dtest=DispatchHistoryControllerTest test
 
-      - name: Run JaCoCo
-        run: mvn test jacoco:report
-
-      - name: Upload JaCoCo Reports
-        uses: actions/upload-artifact@v2
-        with:
-          name: jacoco-reports
-          path: ./target/site/jacoco # Adjust the path to your JaCoCo reports
-
-      - name: Debug Workspace
+      - name: Run Coverage
         run: |
-          ls -R
-          echo "Current Directory: $PWD"
+            chmod +x gradlew
+            ./gradlew testCoverage
+
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: |
+              ${{ github.workspace }}/**/build/reports/jacoco/prodNormalDebugCoverage/prodNormalDebugCoverage.xml,
+              ${{ github.workspace }}/**/build/reports/jacoco/**/debugCoverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
+
+#      - name: Run JaCoCo
+#        run: mvn test jacoco:report
+#
+#      - name: Upload JaCoCo Reports
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: jacoco-reports
+#          path: ./target/site/jacoco # Adjust the path to your JaCoCo reports
+#
+#      - name: Debug Workspace
+#        run: |
+#          ls -R
+#          echo "Current Directory: $PWD"
       
 
       #      - name: Upload coverage to Coveralls
