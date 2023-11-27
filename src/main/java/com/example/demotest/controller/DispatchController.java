@@ -32,17 +32,16 @@ public class DispatchController {
         return dispatchHistoryRepository.findAllByStatusOrderByEmergencyLevelAsc("pending");
     }
 
-    @RequestMapping(path = "/search_distance")
-//search for all active requests within certain distance, order by emergency level
-    public @ResponseBody Iterable<DispatchHistory> getRequestByRadius(@RequestParam Double latitude,
-                                                                      @RequestParam Double longitude,
-                                                                      @RequestParam Double radius) {
+    @RequestMapping(path = "/search_distance")//search for all active requests within certain distance, order by emergency level
+    public @ResponseBody Iterable<DispatchHistory> getRequestByRadius (@RequestParam Double latitude,
+                                                                   @RequestParam Double longitude,
+                                                                   @RequestParam Double radius) {
         Double minLat = latitude - radius;
         Double maxLat = latitude + radius;
         Double minLon = longitude - radius;
         Double maxLon = longitude + radius;
 
-        return dispatchHistoryRepository.findAllByLatitudeBetweenAndLongitudeBetweenAndStatusEqualsOrderByEmergencyLevel(minLat, maxLat, minLon, maxLon, "pending");
+        return dispatchHistoryRepository.findAllByLatitudeBetweenAndLongitudeBetweenAndStatusEqualsOrderByEmergencyLevel(minLat, maxLat, minLon, maxLon,"pending");
     }
 
     @PostMapping(path = "/accept/{id}") // responder accepts a request
@@ -65,7 +64,7 @@ public class DispatchController {
         Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(name));
         Responder responder = null;
         Double maxRate = -1.0;
-        for (DispatchHistory history : allHistory) {
+        for (DispatchHistory history: allHistory) {
             if (history.getRating() != null) {
                 if (history.getRating() > maxRate) {
                     maxRate = history.getRating();
@@ -100,7 +99,11 @@ public class DispatchController {
                 mostRepeated = e;
             }
         }
-
-        return mostRepeated.getKey();
+        try {
+            return mostRepeated.getKey();
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
+
 }
