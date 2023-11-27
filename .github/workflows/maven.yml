@@ -40,9 +40,9 @@ jobs:
       - name: User Controller Unit Test
         run: mvn -Dtest=UserControllerTest test
 
-#      - name: Dispatch Controller Unit Test
-#        run: mvn -Dtest=DispatchControllerTest test
-#
+      - name: Dispatch Controller Unit Test
+        run: mvn -Dtest=DispatchControllerTest test
+
 #      - name: Dispatch History Controller Unit Test
 #        run: mvn -Dtest=DispatchHistoryControllerTest test
 
