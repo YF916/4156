@@ -43,8 +43,8 @@ jobs:
       - name: Dispatch Controller Unit Test
         run: mvn -Dtest=DispatchControllerTest test
 
-#      - name: Dispatch History Controller Unit Test
-#        run: mvn -Dtest=DispatchHistoryControllerTest test
+      - name: Dispatch History Controller Unit Test
+        run: mvn -Dtest=DispatchHistoryControllerTest test
 
 #      - name: Run JaCoCo
 #        run: mvn test jacoco:report

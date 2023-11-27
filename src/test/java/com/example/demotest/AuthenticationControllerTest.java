@@ -107,7 +107,7 @@ public class AuthenticationControllerTest {
         // Missing password
 
         Exception exception = assertThrows(InvalidRequestException.class, () -> {
-            authenticationController.authenticateUser(requestBody);
+            authenticationController.authenticateResponder(requestBody);
         });
 
         String expectedMessage = "request body should have username and password";
@@ -123,7 +123,7 @@ public class AuthenticationControllerTest {
         // Missing username
 
         Exception exception = assertThrows(InvalidRequestException.class, () -> {
-            authenticationController.authenticateUser(requestBody);
+            authenticationController.authenticateResponder(requestBody);
         });
 
         String expectedMessage = "request body should have username and password";

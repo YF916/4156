@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import com.example.demotest.controller.DispatchHistoryController;
 import com.example.demotest.model.DispatchHistory;
@@ -115,7 +116,6 @@ public class DispatchControllerTest {
         history.setResponder(responder);
         return history;
     }
-
 
     @Test
     public void testGetRateRecommend_WithRatings() {
