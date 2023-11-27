@@ -47,6 +47,7 @@ public class DispatchController {
     @PostMapping(path = "/accept/{id}") // responder accepts a request
     public @ResponseBody String dispatchResponder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Integer id) {
         String username = userDetails.getUsername();
+        System.out.println("username"+username);
         Responder responderToDispatch = responderRepository.getReferenceById(username);
         DispatchHistory request = dispatchHistoryRepository.getReferenceById(id);
         if (!request.getStatus().equals("pending")) {

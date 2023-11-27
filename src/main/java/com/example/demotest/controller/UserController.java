@@ -28,7 +28,6 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private DispatchHistoryRepository dispatchHistoryRepository;
-    @Secured("ROLE_ADMIN")
     @PostMapping(path = "/send_request")
     public @ResponseBody String sendDispatchRequest(@AuthenticationPrincipal UserDetails userDetails, @RequestBody DispatchHistory history) {
         System.out.println("userDetails" + userDetails);
