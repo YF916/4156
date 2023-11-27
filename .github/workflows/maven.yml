@@ -92,12 +92,33 @@ jobs:
           name: jacoco-reports
           path: target/site/jacoco
 
+      - name: Run SpotBugs Analysis
+        run: |
+          mvn spotbugs:check 2> spotbugs-errors.txt || true
+          if [ -s spotbugs-errors.txt ]; then
+            echo "SpotBugs found issues:"
+            cat spotbugs-errors.txt
+          fi
+
+#      - name: Upload SpotBugs Reports
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: spotbugs-reports
+#          path: target/spotbugs
+
+      - name: Upload SpotBugs Errors
+        if: always()  # Upload errors even if there are no issues
+        uses: actions/upload-artifact@v2
+        with:
+          name: spotbugs-errors
+          path: spotbugs-errors.txt
+
 
 #      - name: Run SpotBugs Analysis
 #        run: mvn spotbugs:check
 
-      - name: Run SpotBugs Analysis
-        run: mvn spotbugs:check || true
+#      - name: Run SpotBugs Analysis
+#        run: mvn spotbugs:check || true
 
 #      - name: Upload SpotBugs Reports
 #        uses: actions/upload-artifact@v2
@@ -106,12 +127,12 @@ jobs:
 #          path: target/spotbugs
 
 
-      - name: Always Upload SpotBugs Reports
-        if: always()  # Upload the reports regardless of previous steps' outcomes
-        uses: actions/upload-artifact@v2
-        with:
-          name: spotbugs-reports
-          path: target/spotbugs
+#      - name: Always Upload SpotBugs Reports
+#        if: always()  # Upload the reports regardless of previous steps' outcomes
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: spotbugs-reports
+#          path: target/spotbugs
 #
 #      - name: Debug Workspace
 #        run: |
