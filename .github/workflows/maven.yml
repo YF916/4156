@@ -31,17 +31,20 @@ jobs:
       - name: Build with Maven
         run: mvn -B compile --file pom.xml
 
-      - name: User Controller Unit Test
-        run: mvn -Dtest=UserControllerTest test
+      - name: Controller Unit Test
+        run: mvn -Dtest=ControllerTest test
 
-      - name: Dispatch Controller Unit Test
-        run: mvn -Dtest=DispatchControllerTest test
+#      - name: User Controller Unit Test
+#        run: mvn -Dtest=UserControllerTest test
+#
+#      - name: Dispatch Controller Unit Test
+#        run: mvn -Dtest=DispatchControllerTest test
+#
+#      - name: Dispatch History Controller Unit Test
+#        run: mvn -Dtest=DispatchHistoryControllerTest test
 
-      - name: Dispatch History Controller Unit Test
-        run: mvn -Dtest=DispatchHistoryControllerTest test
-
-      - name: Run JaCoCo
-        run: mvn test jacoco:report
+#      - name: Run JaCoCo
+#        run: mvn test jacoco:report
 
 #      - name: Upload coverage to Coveralls
 #        uses: coverallsapp/github-action@master
