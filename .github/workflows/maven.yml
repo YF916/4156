@@ -47,10 +47,30 @@ jobs:
       - name: Dispatch History Controller Unit Test
         run: mvn -Dtest=DispatchHistoryControllerTest test
 
-      - name: Run Coverage
-        run: |
-          chmod +x gradlew
-          ./gradlew testCoverage
+      - name: JaCoCo Code Coverage Report
+        id: jacoco_reporter
+        uses: PavanMudigonda/jacoco-reporter@v4.9
+        with:
+            coverage_results_path: jacoco-report/test.xml
+            coverage_report_name: Coverage
+            coverage_report_title: JaCoCo
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            skip_check_run: false
+            minimum_coverage: 80
+            fail_below_threshold: false
+            publish_only_summary: false
+
+      - name: Upload Code Coverage Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report-markdown
+          path: coverage-results.md
+          retention-days: 1
+
+      #      - name: Run Coverage
+#        run: |
+#          chmod +x gradlew
+#          ./gradlew testCoverage
 
 #      - name: Add coverage to PR
 #        id: jacoco
@@ -70,7 +90,7 @@ jobs:
 #        uses: actions/upload-artifact@v2
 #        with:
 #          name: jacoco-reports
-#          path: ./target/site/jacoco # Adjust the path to your JaCoCo reports
+#          path: target/site/jacoco # Adjust the path to your JaCoCo reports
 #
 #      - name: Debug Workspace
 #        run: |
