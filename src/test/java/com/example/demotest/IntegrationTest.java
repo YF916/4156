@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class IntegrationTest {
     @BeforeAll
     public static void setup() {
-        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.baseURI = "http://127.0.0.1:8080";
     }
 
     @Test
@@ -66,6 +66,7 @@ public class IntegrationTest {
 
         testUserSearch(token);
         testUserRequest(token);
+
     }
 
     private void testUserSearch(String token) {
@@ -104,7 +105,6 @@ public class IntegrationTest {
             case 200:
                 break;
             case 400:
-                // Assert specific output for status code 409
                 assertEquals("you already have an active request", response.getBody().asString());
                 break;
             default:
