@@ -183,24 +183,36 @@ jobs:
 #        run: |
 #          postman collection run "30513862-c0eb6f7c-d809-4afe-934f-76cd6cdaa339" -e "30513862-e48d36ea-69f6-463e-a1a7-057c19ac3a90"
 
-
-  postman_tests:
+  automated-api-tests:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Install Postman CLI
+        run: |
+          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key PMAK-6566045e3c33ce3342fd6718-90008933ccff780237fc0fdf760f9156ae
+      - name: Run API tests
+        run: |
+          postman collection run "${{ github.workspace }}/postman/collections/Integration Testing.json" -e "30513862-e48d36ea-69f6-463e-a1a7-057c19ac3a90" --integration-id "153641-${{ github.run_id }}"
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16'  # Updated Node.js version
-
-      - name: Install Newman
-        run: npm install -g newman
-
-      - name: Run a basic Newman test
-        run: newman run https://www.postman.com/collections/8a0c9bc08f062d12dcda  # This is a sample collection URL
-
-      - name: Run Postman tests
-        run: newman run Integration_Testing.postman_collection.json --verbose
+#  postman_tests:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v2
+#
+#      - name: Set up Node.js
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: '16'  # Updated Node.js version
+#
+#      - name: Install Newman
+#        run: npm install -g newman
+#
+#      - name: Run a basic Newman test
+#        run: newman run https://www.postman.com/collections/8a0c9bc08f062d12dcda  # This is a sample collection URL
+#
+#      - name: Run Postman tests
+#        run: newman run Integration_Testing.postman_collection.json --verbose
