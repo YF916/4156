@@ -41,6 +41,19 @@ public class Responder {
     @Column(name = "rating")
     private Double rating;
 
+    @Column(name = "password")
+    private String password;
+    public Responder() {}
+    public Responder(Responder original) {
+        this.name = original.getName();
+        this.phone = original.getPhone();
+        this.latitude = original.getLatitude();
+        this.longitude = original.getLongitude();
+        this.status = original.getStatus();
+        this.rating = original.getRating();
+        this.password = original.getPassword();
+    }
+
     public String getPassword() {
         return password;
     }
@@ -48,9 +61,6 @@ public class Responder {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    @Column(name = "password")
-    private String password;
 
     public String getPhone() {
         return phone;

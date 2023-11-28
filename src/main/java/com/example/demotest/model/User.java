@@ -20,6 +20,12 @@ public class User {
     @NotBlank
     @Column(name = "password")
     private String password;
+    public User() {}
+    public User(User user) {
+        this.name = user.getName();
+        this.phone = user.getPhone();
+        this.password = user.getPassword();
+    }
 
     public String getPassword() {
         return password;

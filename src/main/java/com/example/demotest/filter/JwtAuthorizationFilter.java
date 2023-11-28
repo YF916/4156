@@ -23,7 +23,7 @@ import java.util.List;
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    private final String SECRET_KEY ="COMS656finalprojectUserLoginServiceSecretKeyhopethisisenoughfor256bits"; // Replace with a secure secret key
+    private static final String SECRET_KEY ="COMS656finalprojectUserLoginServiceSecretKeyhopethisisenoughfor256bits"; // Replace with a secure secret key
 
     @Override
     protected void doFilterInternal(
@@ -50,6 +50,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     .withUsername(username)
                     .password((String)claims.get("password"))
                     .authorities(role).build();
+            System.out.println("userDetails"+userDetails);
             // Set user authentication in the security context
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                     userDetails,

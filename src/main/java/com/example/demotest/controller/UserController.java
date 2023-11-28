@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 
-@Controller // This means that this class is a Controller
+@RestController // This means that this class is a Controller
 @RequestMapping(path = "/user") // This means URL's start with /user
 public class UserController {
     @Autowired // This means to get the bean called userRepository
@@ -28,7 +28,6 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private DispatchHistoryRepository dispatchHistoryRepository;
-    @Secured("ROLE_ADMIN")
     @PostMapping(path = "/send_request")
     public @ResponseBody String sendDispatchRequest(@AuthenticationPrincipal UserDetails userDetails, @RequestBody DispatchHistory history) {
         System.out.println("userDetails" + userDetails);
@@ -45,7 +44,7 @@ public class UserController {
         return "request submitted";
     }
 
-    @GetMapping(path = "/all")
+    @GetMapping(path = "/self")
     public @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
         return userRepository.findAll();

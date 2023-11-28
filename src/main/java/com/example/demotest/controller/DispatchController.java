@@ -47,6 +47,7 @@ public class DispatchController {
     @PostMapping(path = "/accept/{id}") // responder accepts a request
     public @ResponseBody String dispatchResponder(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Integer id) {
         String username = userDetails.getUsername();
+        System.out.println("username"+username);
         Responder responderToDispatch = responderRepository.getReferenceById(username);
         DispatchHistory request = dispatchHistoryRepository.getReferenceById(id);
         if (!request.getStatus().equals("pending")) {
@@ -58,7 +59,7 @@ public class DispatchController {
         return "Accepted";
     }
 
-    @GetMapping(path = "/recommend/rate") // called when the dispatch starts
+    /*@GetMapping(path = "/recommend/rate") // called when the dispatch starts
     public @ResponseBody
     Responder getRateRecommend(@RequestParam("user_name") String name) {
         Iterable<DispatchHistory> allHistory = dispatchHistoryRepository.findByCaller(userRepository.getReferenceById(name));
@@ -104,6 +105,6 @@ public class DispatchController {
         } catch (NullPointerException e) {
             return null;
         }
-    }
+    }*/
 
 }
