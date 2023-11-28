@@ -47,6 +47,9 @@ jobs:
       - name: Dispatch History Controller Unit Test
         run: mvn -Dtest=DispatchHistoryControllerTest test
 
+      - name: Integration Test
+        run: mvn -Dtest=IntegrationTest test
+
 #      - name: JaCoCo Code Coverage Report
 #        id: jacoco_reporter
 #        uses: PavanMudigonda/jacoco-reporter@v4.9
@@ -183,18 +186,18 @@ jobs:
 #        run: |
 #          postman collection run "30513862-c0eb6f7c-d809-4afe-934f-76cd6cdaa339" -e "30513862-e48d36ea-69f6-463e-a1a7-057c19ac3a90"
 
-  automated-api-tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Postman CLI
-        run: |
-          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
-      - name: Login to Postman CLI
-        run: postman login --with-api-key PMAK-6566045e3c33ce3342fd6718-90008933ccff780237fc0fdf760f9156ae
-      - name: Run API tests
-        run: |
-          postman collection run "${{ github.workspace }}/postman/collections/Integration Testing.json" -e "30513862-e48d36ea-69f6-463e-a1a7-057c19ac3a90" --integration-id "153641-${{ github.run_id }}"
+#  automated-api-tests:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Install Postman CLI
+#        run: |
+#          curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+#      - name: Login to Postman CLI
+#        run: postman login --with-api-key PMAK-6566045e3c33ce3342fd6718-90008933ccff780237fc0fdf760f9156ae
+#      - name: Run API tests
+#        run: |
+#          postman collection run "${{ github.workspace }}/postman/collections/Integration Testing.json" -e "30513862-e48d36ea-69f6-463e-a1a7-057c19ac3a90" --integration-id "153641-${{ github.run_id }}"
 
 #  postman_tests:
 #    runs-on: ubuntu-latest
