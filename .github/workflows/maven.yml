@@ -122,17 +122,17 @@ jobs:
 #          path: spotbugs-errors.txt
 
 
-#      - name: Run SpotBugs Analysis
-#        run: mvn spotbugs:check
+      - name: Run SpotBugs Analysis
+        run: mvn spotbugs:check
 
 #      - name: Run SpotBugs Analysis
 #        run: mvn spotbugs:check || true
 
-#      - name: Upload SpotBugs Reports
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: spotbugs-reports
-#          path: target/spotbugs
+      - name: Upload SpotBugs Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: spotbugs-reports
+          path: target/spotbugs
 
 
 #      - name: Always Upload SpotBugs Reports
