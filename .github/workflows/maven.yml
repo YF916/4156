@@ -92,8 +92,8 @@ jobs:
           name: jacoco-reports
           path: target/site/jacoco
 
-      - name: Run SpotBugs Analysis and Upload Report
-        run: mvn spotbugs:gui
+#      - name: Run SpotBugs Analysis and Upload Report
+#        run: mvn spotbugs:gui
         # Upload the SpotBugs reports
 #        uses: actions/upload-artifact@v2
 #        with:
@@ -108,11 +108,11 @@ jobs:
 #            cat spotbugs-errors.txt
 #          fi
 
-      - name: Upload SpotBugs Reports
-        uses: actions/upload-artifact@v2
-        with:
-          name: spotbugs-reports
-          path: target/spotbugs
+#      - name: Upload SpotBugs Reports
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: spotbugs-reports
+#          path: target/spotbugs
 
 #      - name: Upload SpotBugs Errors
 #        if: always()  # Upload errors even if there are no issues
