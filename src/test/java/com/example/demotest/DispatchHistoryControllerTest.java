@@ -202,12 +202,10 @@ public class DispatchHistoryControllerTest {
     public void testUpdateArrivalTime_Success() {
         DispatchHistory dispatchToUpdate = new DispatchHistory();
         when(dispatchHistoryRepository.getReferenceById(1)).thenReturn(dispatchToUpdate);
-        LocalDateTime arrivalTime = LocalDateTime.now();
 
-        String result = dispatchHistoryController.updateArrivalTime(1, arrivalTime);
+        String result = dispatchHistoryController.updateArrivalTime(1);
 
         assertEquals("Arrived", result);
-        assertEquals(arrivalTime, dispatchToUpdate.getArrivalTime());
         assertEquals("arrived", dispatchToUpdate.getStatus());
         verify(dispatchHistoryRepository).save(dispatchToUpdate);
     }

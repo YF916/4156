@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: com.example.demotest.IntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 0.817 s <<< FAILURE! - in com.example.demotest.IntegrationTest
+testUserRegister  Time elapsed: 0.415 s  <<< ERROR!
+java.net.ConnectException: Connection refused
+	at com.example.demotest.IntegrationTest.testUserRegister(IntegrationTest.java:28)
+
+testUserLogin  Time elapsed: 0.026 s  <<< ERROR!
+java.net.ConnectException: Connection refused
+	at com.example.demotest.IntegrationTest.testUserLogin(IntegrationTest.java:52)
+

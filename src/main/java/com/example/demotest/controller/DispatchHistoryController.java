@@ -53,7 +53,8 @@ public class DispatchHistoryController {
     }
 
     @PostMapping(path = "/arrived") // called when dispatcher arrived on scene
-    public @ResponseBody String updateArrivalTime(@RequestParam int id, @RequestParam("arrival_time")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime arrivalTime) {
+    public @ResponseBody String updateArrivalTime(@RequestParam int id) {
+        LocalDateTime arrivalTime = LocalDateTime.now();
         DispatchHistory dispatchToUpdate = dispatchHistoryRepository.getReferenceById(id);
         dispatchToUpdate.setArrivalTime(arrivalTime);
         dispatchToUpdate.setStatus("arrived");
