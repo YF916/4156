@@ -198,5 +198,8 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
 
+      - name: Run a basic Newman test
+        run: newman run https://www.postman.com/collections/8a0c9bc08f062d12dcda  # This is a sample collection URL
+
       - name: Run Postman tests
-        run: newman run Integration_Testing.postman_collection.json
+        run: newman run Integration_Testing.postman_collection.json --verbose
