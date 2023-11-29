@@ -68,6 +68,9 @@ jobs:
       - name: Run SpotBugs Analysis
         run: mvn spotbugs:spotbugs
 
+      - name: Generate SpotBugs Report
+        run: mvn spotbugs:gui
+
       - name: List report directory
         run: ls target/site/spotbugs || echo "SpotBugs report not found."
 
