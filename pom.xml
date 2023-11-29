@@ -124,7 +124,7 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.8.0.0</version> <!-- Use the latest compatible version -->
                 <configuration>
-                    <xmlOutput>true</xmlOutput> <!-- Generates XML reports -->
+                    <htmlOutput>true</htmlOutput> <!-- Generates XML reports -->
                     <!-- Other formats like HTML can also be specified -->
                 </configuration>
                 <executions>

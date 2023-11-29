@@ -69,13 +69,13 @@ jobs:
         run: mvn spotbugs:spotbugs
 
       - name: List report directory
-        run: ls target/site/spotbugs || echo "SpotBugs report not found."
+        run: ls target/spotbugs.html || echo "SpotBugs report not found."
 
       - name: Upload SpotBugs Reports
         uses: actions/upload-artifact@v2
         with:
           name: spotbugs-reports
-          path: target/site/spotbugs
+          path: target/spotbugs.html
 
 #      - name: Run SpotBugs Analysis
 #        run: mvn spotbugs:check
