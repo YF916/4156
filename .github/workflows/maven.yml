@@ -31,6 +31,12 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B compile --file pom.xml
+      - name: Start Spring Boot Application
+        run: mvn spring-boot:run &
+#        background: true
+
+      - name: Wait for Spring Boot Application to Start
+        run: sleep 30
 
       - name: Authentication Controller Unit Test
         run: mvn -Dtest=AuthenticationControllerTest test
