@@ -38,9 +38,6 @@ jobs:
       - name: Wait for Spring Boot Application to Start
         run: sleep 30
 
-  unit-tests:
-    runs-on: ubuntu-latest
-    steps:
       - name: Authentication Controller Unit Test
         run: mvn -Dtest=AuthenticationControllerTest test
 
@@ -56,32 +53,23 @@ jobs:
       - name: Dispatch History Controller Unit Test
         run: mvn -Dtest=DispatchHistoryControllerTest test
 
-  integration-tests:
-    runs-on: ubuntu-latest
-    steps:
       - name: Integration Test
         run: mvn -Dtest=IntegrationTest test
 
-  branch-coverage-report:
-    runs-on: ubuntu-latest
-    steps:
       - name: Run JaCoCo
         run: mvn test jacoco:report
 
       - name: Upload JaCoCo Reports
         uses: actions/upload-artifact@v2
         with:
-          name: jacoco-reports
+          name: branch-coverage-jacoco-reports
           path: target/site/jacoco
 
-  bug-finder-report:
-    runs-on: ubuntu-latest
-    steps:
       - name: Run SpotBugs Analysis
         run: mvn spotbugs:spotbugs
 
       - name: Upload SpotBugs Reports
         uses: actions/upload-artifact@v2
         with:
-          name: spotbugs-reports
+          name: bug-finder-spotbugs-reports
           path: target/spotbugs.html
