@@ -209,6 +209,7 @@ public class IntegrationTest {
         // System.out.println(token);
 
         testResponderSearch(token);
+        testResponderSearchWithinDistance(token);
         testResponderAccept(token, 9);
 
     }
@@ -219,6 +220,31 @@ public class IntegrationTest {
                 .contentType(ContentType.JSON)
                 .when()
                 .get("/responder/search")
+                .then()
+                .extract().response();
+
+        int statusCode = response.getStatusCode();
+        switch (statusCode) {
+            case 200:
+                break;
+            default:
+                fail("Unexpected status code: " + statusCode);
+        }
+
+    }
+
+    private void testResponderSearchWithinDistance(String token) {
+        Double longitude = 10.50;
+        Double latitude = 20.50;
+        Double radius = 5.00;
+        Response response = given()
+                .header("Authorization", "Bearer " + token)
+                .param("longitude", longitude)
+                .param("latitude", latitude)
+                .param("radius", radius)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/responder/search_distance")
                 .then()
                 .extract().response();
 
