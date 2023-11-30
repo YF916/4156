@@ -34,9 +34,9 @@ Finally build using maven ```mvn clean install``` and run the application from y
 
 **API Testing:**
 
-All API entry points are tested using postman: https://www.postman.com/yf916/workspace/ase-api-testing/collection/30513862-0c556156-e066-42fa-8966-b0a5aebeb2d9?action=share&creator=30513862
+All API entry points are tested using postman: https://api.postman.com/collections/31111400-30ae9d1e-7e64-41e6-be68-6830a4124c24?access_key=PMAT-01HGGGVN6VFBGQFQJ1TWBFJS37
 
-<img width="1624" alt="api-testing-all" src="https://github.com/YF916/COMSW4156-ASE-project/assets/144531191/c5d2a20e-ebb4-417f-aa75-6bd1fcb40bff">
+
 
 
 
