@@ -60,6 +60,7 @@ import static org.mockito.Mockito.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -331,6 +332,37 @@ public class DispatchHistoryControllerTest {
             dispatchHistoryController.searchDispatchHistory(userDetails, "pending");
         });
     }
+
+    @Test
+    public void testUpdateArrivalTime_InvalidId() {
+        when(dispatchHistoryRepository.getReferenceById(999)).thenThrow(EntityNotFoundException.class);
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            dispatchHistoryController.updateArrivalTime(999);
+        });
+    }
+
+    @Test
+    public void testFinishDispatch_InvalidId() {
+        when(dispatchHistoryRepository.getReferenceById(999)).thenThrow(EntityNotFoundException.class);
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            dispatchHistoryController.finishDispatch(999);
+        });
+    }
+
+    @Test
+    public void testSearchDispatchHistory_InvalidAuthorization() {
+        setupUserDetailsWithAuthority("userUsername", "admin");
+
+        assertThrows(AccessDeniedException.class, () -> {
+            dispatchHistoryController.searchDispatchHistory(userDetails, "invalidStatus");
+        });
+    }
+
+
+
+
 
 
 

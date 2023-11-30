@@ -17,6 +17,9 @@
         <java.version>17</java.version>
     </properties>
     <dependencies>
+
+
+
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -91,6 +94,7 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>

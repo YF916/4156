@@ -12,6 +12,12 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
+
+
+
 
 @ExtendWith(MockitoExtension.class)
 public class IntegrationTest {
@@ -210,7 +216,7 @@ public class IntegrationTest {
 
         testResponderSearch(token);
         testResponderSearchWithinDistance(token);
-        testResponderAccept(token, 9);
+        testResponderAccept(token, 15);
 
     }
 
@@ -234,8 +240,8 @@ public class IntegrationTest {
     }
 
     private void testResponderSearchWithinDistance(String token) {
-        Double longitude = 10.50;
-        Double latitude = 20.50;
+        Double longitude = 40.00;
+        Double latitude = -74.006;
         Double radius = 5.00;
         Response response = given()
                 .header("Authorization", "Bearer " + token)
@@ -249,7 +255,20 @@ public class IntegrationTest {
                 .extract().response();
 
         int statusCode = response.getStatusCode();
-        switch (statusCode) {
+//        System.out.println("11111");
+//        String jsonString = response.getBody().asString();
+
+//        System.out.println(jsonString);
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        try {
+//            List<ResponseItem> items = objectMapper.readValue(jsonString, new TypeReference<List<ResponseItem>>(){});
+//            int id = items.get(0).getId();
+//            System.out.println("ID: " + id);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+            switch (statusCode) {
             case 200:
                 break;
             default:
@@ -290,6 +309,7 @@ public class IntegrationTest {
                 .then()
                 .statusCode(401) // Assuming that the server returns 401 for invalid credentials
                 .body(containsString("Account credentials does not match "));
+
     }
 
     @Test
