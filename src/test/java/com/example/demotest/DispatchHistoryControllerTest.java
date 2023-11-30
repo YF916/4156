@@ -27,6 +27,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.security.InvalidParameterException;
 import java.util.Collection;
 import java.util.Collections;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -63,41 +64,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
 import java.util.Collections;
-
-//class TestUserDetails implements UserDetails {
-//    private String username;
-//    private Collection<? extends GrantedAuthority> authorities;
-//
-//    public TestUserDetails(String username, Collection<? extends GrantedAuthority> authorities) {
-//        this.username = username;
-//        this.authorities = authorities;
-//    }
-//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return authorities;
-//    }
-//
-//    // Implement other methods of UserDetails interface
-//    // ...
-//
-//    @Override
-//    public String getUsername() {
-//        return username;
-//    }
-//
-//    // For simplicity, you can return true for other methods or implement as needed
-//    @Override
-//    public String getPassword() { return null; }
-//    @Override
-//    public boolean isAccountNonExpired() { return true; }
-//    @Override
-//    public boolean isAccountNonLocked() { return true; }
-//    @Override
-//    public boolean isCredentialsNonExpired() { return true; }
-//    @Override
-//    public boolean isEnabled() { return true; }
-//}
 
 
 @ExtendWith(MockitoExtension.class)
@@ -224,47 +190,6 @@ public class DispatchHistoryControllerTest {
     }
 
 
-
-
-
-
-
-
-
-
-//    private void setupUserDetailsWithAuthority(String authority, String username) {
-//        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + authority.toUpperCase());
-//        when(userDetails.getUsername()).thenReturn(username);
-//        when(userDetails.getAuthorities()).thenReturn(Collections.singletonList(grantedAuthority));
-//    }
-
-//    private UserDetails createUserDetailsWithAuthority(String username, String role) {
-//        List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
-//        User user = new User();
-//        user.setName(username);
-//        user.setPassword("password");
-//
-//        //username, "password", grantedAuthorities
-//
-//        UserDetails userDetails = (UserDetails) user;
-//        userDetails.getAuthorities()
-//        return spy(userDetails);
-//    }
-//
-//    private UserDetails createUserDetailsWithNoAuthority(String username) {
-//        UserDetails userDetails = new User(username, "password", Collections.emptyList());
-//        return spy(userDetails);
-//    }
-//
-//
-
-//    private void setupUserDetailsWithAuthority(String username, String role) {
-//        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
-//        when(userDetails.getUsername()).thenReturn(username);
-//        when(userDetails.getAuthorities()).thenReturn(Collections.singletonList(grantedAuthority));
-//    }
-
-
     private void setupUserDetailsWithAuthority(String username, String role) {
         //GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
         when(userDetails.getUsername()).thenReturn(username);
@@ -303,21 +228,6 @@ public class DispatchHistoryControllerTest {
         verify(dispatchHistoryRepository).findByResponderAndStatus(responder, "pending");
     }
 
-
-//    @Test
-//    public void testSearchDispatchHistory_UserRole() {
-//        setupUserDetailsWithAuthority("user", "userUsername");
-//
-//        User user = new User(); // Assuming a constructor exists
-//        when(userRepository.getReferenceById("userUsername")).thenReturn(user);
-//        List<DispatchHistory> expectedDispatchHistories = new ArrayList<>();
-//        when(dispatchHistoryRepository.findByCallerAndStatus(user, "pending")).thenReturn(expectedDispatchHistories);
-//
-//        Iterable<DispatchHistory> result = dispatchHistoryController.searchDispatchHistory(userDetails, "pending");
-//
-//        assertEquals(expectedDispatchHistories, result);
-//        verify(dispatchHistoryRepository).findByCallerAndStatus(user, "pending");
-//    }
 
     private void setupUserDetailsWithNoAuthority(String username) {
         when(userDetails.getUsername()).thenReturn(username);
@@ -360,12 +270,121 @@ public class DispatchHistoryControllerTest {
         });
     }
 
+    @Test
+    public void testUpdateArrivalTimeWhenDispatchHistoryIsNull() {
+        when(dispatchHistoryRepository.getReferenceById(1)).thenReturn(null);
+
+        assertThrows(NullPointerException.class, () -> {
+            dispatchHistoryController.updateArrivalTime(1);
+        });
+    }
+
+    @Test
+    public void testSetResponderWithNull() {
+        DispatchHistory dispatchHistory = new DispatchHistory();
+        dispatchHistory.setResponder(null);
+        assertNull(dispatchHistory.getResponder());
+    }
+    @Test
+    public void testSettersAndGetters() {
+        // Create a new instance of DispatchHistory
+        DispatchHistory dispatchHistory = new DispatchHistory();
+
+        // Test setLatitude and getLatitude
+        double testLatitude = 45.0;
+        dispatchHistory.setLatitude(testLatitude);
+        assertEquals(testLatitude, dispatchHistory.getLatitude(), "Latitude should be set and retrieved correctly.");
+
+        // Test setLongitude and getLongitude
+        double testLongitude = 90.0;
+        dispatchHistory.setLongitude(testLongitude);
+        assertEquals(testLongitude, dispatchHistory.getLongitude(), "Longitude should be set and retrieved correctly.");
+
+        // Test setMessage and getMessage
+        String testMessage = "Help needed";
+        dispatchHistory.setMessage(testMessage);
+        assertEquals(testMessage, dispatchHistory.getMessage(), "Message should be set and retrieved correctly.");
+
+        // Test setEmergencyLevel and getEmergencyLevel
+        int testEmergencyLevel = 3;
+        dispatchHistory.setEmergencyLevel(testEmergencyLevel);
+        assertEquals(testEmergencyLevel, dispatchHistory.getEmergencyLevel(), "Emergency level should be set and retrieved correctly.");
+
+        // Test setEmergencyType and getEmergencyType
+        String testEmergencyType = "medical";
+        dispatchHistory.setEmergencyType(testEmergencyType);
+        assertEquals(testEmergencyType, dispatchHistory.getEmergencyType(), "Emergency type should be set and retrieved correctly.");
+
+        // Test setId and getId
+        Integer testId = 100;
+        dispatchHistory.setId(testId);
+        assertEquals(testId, dispatchHistory.getId(), "ID should be set and retrieved correctly.");
+
+
+        // Test setStartTime and getStartTime
+        LocalDateTime testStartTime = LocalDateTime.now();
+        dispatchHistory.setStartTime(testStartTime);
+        assertEquals(testStartTime, dispatchHistory.getStartTime(), "Start time should be set and retrieved correctly.");
+
+        // Test setArrivalTime and getArrivalTime
+        LocalDateTime testArrivalTime = LocalDateTime.now().plusHours(1); // One hour later
+        dispatchHistory.setArrivalTime(testArrivalTime);
+        assertEquals(testArrivalTime, dispatchHistory.getArrivalTime(), "Arrival time should be set and retrieved correctly.");
+
+        // Test setRating and getRating
+        double testRating = 4.5;
+        dispatchHistory.setRating(testRating);
+        assertEquals(testRating, dispatchHistory.getRating(), 0.01, "Rating should be set and retrieved correctly.");
+
+        // Test setFeedback and getFeedback
+        String testFeedback = "Very efficient";
+        dispatchHistory.setFeedback(testFeedback);
+        assertEquals(testFeedback, dispatchHistory.getFeedback(), "Feedback should be set and retrieved correctly.");
+
+        // Test setStatus and getStatus
+        String testStatus = "finished";
+        dispatchHistory.setStatus(testStatus);
+        assertEquals(testStatus, dispatchHistory.getStatus(), "Status should be set and retrieved correctly.");
+    }
 
 
 
 
 
 
+
+
+//    private void setupUserDetailsWithAuthority(String authority, String username) {
+//        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + authority.toUpperCase());
+//        when(userDetails.getUsername()).thenReturn(username);
+//        when(userDetails.getAuthorities()).thenReturn(Collections.singletonList(grantedAuthority));
+//    }
+
+//    private UserDetails createUserDetailsWithAuthority(String username, String role) {
+//        List<GrantedAuthority> grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
+//        User user = new User();
+//        user.setName(username);
+//        user.setPassword("password");
+//
+//        //username, "password", grantedAuthorities
+//
+//        UserDetails userDetails = (UserDetails) user;
+//        userDetails.getAuthorities()
+//        return spy(userDetails);
+//    }
+//
+//    private UserDetails createUserDetailsWithNoAuthority(String username) {
+//        UserDetails userDetails = new User(username, "password", Collections.emptyList());
+//        return spy(userDetails);
+//    }
+//
+//
+
+//    private void setupUserDetailsWithAuthority(String username, String role) {
+//        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.toUpperCase());
+//        when(userDetails.getUsername()).thenReturn(username);
+//        when(userDetails.getAuthorities()).thenReturn(Collections.singletonList(grantedAuthority));
+//    }
 
 
 
@@ -408,9 +427,59 @@ public class DispatchHistoryControllerTest {
 
 
 
+//    @Test
+//    public void testSearchDispatchHistory_UserRole() {
+//        setupUserDetailsWithAuthority("user", "userUsername");
+//
+//        User user = new User(); // Assuming a constructor exists
+//        when(userRepository.getReferenceById("userUsername")).thenReturn(user);
+//        List<DispatchHistory> expectedDispatchHistories = new ArrayList<>();
+//        when(dispatchHistoryRepository.findByCallerAndStatus(user, "pending")).thenReturn(expectedDispatchHistories);
+//
+//        Iterable<DispatchHistory> result = dispatchHistoryController.searchDispatchHistory(userDetails, "pending");
+//
+//        assertEquals(expectedDispatchHistories, result);
+//        verify(dispatchHistoryRepository).findByCallerAndStatus(user, "pending");
+//    }
 
 
 
+
+
+//class TestUserDetails implements UserDetails {
+//    private String username;
+//    private Collection<? extends GrantedAuthority> authorities;
+//
+//    public TestUserDetails(String username, Collection<? extends GrantedAuthority> authorities) {
+//        this.username = username;
+//        this.authorities = authorities;
+//    }
+//
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return authorities;
+//    }
+//
+//    // Implement other methods of UserDetails interface
+//    // ...
+//
+//    @Override
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    // For simplicity, you can return true for other methods or implement as needed
+//    @Override
+//    public String getPassword() { return null; }
+//    @Override
+//    public boolean isAccountNonExpired() { return true; }
+//    @Override
+//    public boolean isAccountNonLocked() { return true; }
+//    @Override
+//    public boolean isCredentialsNonExpired() { return true; }
+//    @Override
+//    public boolean isEnabled() { return true; }
+//}
 
 
 
