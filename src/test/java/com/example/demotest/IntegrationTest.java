@@ -245,7 +245,7 @@ public class IntegrationTest {
                 .param("latitude", latitude)
                 .param("radius", radius)
                 .when()
-                .post("/responder/search_distance")
+                .get("/responder/search_distance")
                 .then()
                 .extract().response();
 
