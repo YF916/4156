@@ -68,182 +68,231 @@ serving as a routing mechanism that matches event requests to the most suitable 
 EDS ensures swift request processing, offers clear endpoints for seamless integration, manages both dispatch and historical data retrieval.
 
 
-## Account Management API
+## Register API
 
-The base URL for **Account management** is `http://localhost:8080/user`.
+The base URL for **Account management** is `http://localhost:8080/register`.
 
 ### Authentication
 
 These APIs do not require authentication.
 
-### 1. Add a new user account
+### 1. Register a new user account
 
 #### Endpoint
 
-- **URL**: `/add`
+- **URL**: `/user`
 - **Method**: POST
 
 #### Parameters
 
 - **`name` (required)**: The client's preferred name
 - **`phone` (required)**: The client's mobile phone number
+- **`password` (required)**: The client's password
 
 #### Example
 
 ```http
-POST http://localhost:8080/user/add
+POST http://localhost:8080/register/user
 ```
 Example Request Body:
 ```json
 {
-  "name": "testUser1",
-  "phone": "0000000000"
+  "name":"test1",
+  "phone":"2062955128",
+  "password":"123"
 }
 ```
 #### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
-  - **Content-Type**: String
-  - **Example output**: "Saved"
+  - **Content-Type**: None
+  - **Example output**: None
 
 
-### 2. Find all users account
+### 2. Register a new responder account
 
 #### Endpoint
 
-- **URL**: `/all`
-- **Method**: GET
+- **URL**: `/responder`
+- **Method**: POST
 
 #### Parameters
 
-None
+- **`name` (required)**: The client's preferred name
+- **`phone` (required)**: The client's mobile phone number
+- **`password` (required)**: The client's password 
+- **`latitude` (required)**: latitude of the responder
+- **`longitude` (required)**: longitude of the responder
 
 #### Example
 
 ```http
-GET http://localhost:8080/user/all
-```
-Example Request Body:
-```json
-{}
-```
-#### Response
-
-- **Success Response**:
-    - **HTTP Status Code**: 200 OK
-    - **Content-Type**: application/json
-    - **Example output**:
-```json
-[
-    {
-      "id": 1,
-      "name": "Amy",
-      "phone": "12345678"
-    },
-    {
-      "id": 2,
-      "name": "Frank",
-      "phone": "1234567"
-    }
-]
-```
-
-## Responder Management API 
-
-The base URL for **responder management** is `http://localhost:8080/responder`.
-
-### Authentication
-
-These APIs do not require authentication.
-
-### 1. Add a new responder
-
-#### Endpoint
-
-- **URL**: `/add`
-- **Method**: POST
-
-#### Request body
-
-- **`name` (required)**: The responder's preferred name
-- **`phone` (optional)**: The responder's mobile phone number
-- **`latitude` (required)**: The responder's latitude
-- **`longitude` (required)**: The responder's longitude
-- **`status` (optional)**: The responder's current status
-
-#### Example
-
-```http
-POST http://localhost:8080/responder/add
+POST http://localhost:8080/register/responder
 ```
 Example Request Body:
 ```json
 {
-  "name": "testResponder1",
-  "phone": "0000000000",
-  "latitude": "40.71",
-  "longitude": "40.71",
-  "status": "available"
+  "name": "responder2",
+  "phone":"1234567",
+  "longitude": 30.71,
+  "latitude": 60.82,
+  "password": "1234"
 }
 ```
 #### Response
 
 - **Success Response**:
-    - **HTTP Status Code**: 200 OK
-    - **Content-Type**: String
-    - **Example output**: "Saved"
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: None
+  - **Example output**: None
 
-### 2. Search for an available responder, optionally filtered and ordered by rating
+## Authentication API
+
+The base URL for **Account management** is `http://localhost:8080/authenticate`.
+
+### Authentication
+
+These APIs do not require authentication.
+
+### 1. responder login 
+
+#### Endpoint
+
+- **URL**: `/responder`
+- **Method**: POST
+
+#### Parameters
+
+- **`username` (required)**: The responder's username
+- **`password` (required)**: The responder's password
+
+#### Example
+
+```http
+POST http://localhost:8080/authenticate/responder
+```
+Example Request Body:
+```json
+{
+  "username": "test1",
+  "password": "123"
+}
+```
+#### Response
+
+- **Success Response**:
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: String (a jwt secret token)
+  - **Example output**: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ4aWFvbmluZzEiLCJyb2xlIjoidXNlciIsInBhc3N3b3JkIjoiMTIzIiwiaWF0IjoxNzAxMTk0OTY5LCJleHAiOjE3MDEyODEzNjl9.mnLXUMc6yp9njQFjxDB_xGicY07fwIf8_94WtW8CEgQ
+
+### 2. user login
+
+#### Endpoint
+
+- **URL**: `/user`
+- **Method**: POST
+
+#### Parameters
+
+- **`name` (required)**: The client's username
+- **`password` (required)**: The client's password
+
+#### Example
+
+```http
+POST http://localhost:8080/authenticate/user
+```
+Example Request Body:
+```json
+{
+  "username": "xiaoning1",
+  "password": "123"
+}
+```
+#### Response
+
+- **Success Response**:
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: String (a secret token)
+  - **Example output**: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ4aWFvbmluZzEiLCJyb2xlIjoidXNlciIsInBhc3N3b3JkIjoiMTIzIiwiaWF0IjoxNzAxMTk0OTY5LCJleHAiOjE3MDEyODEzNjl9.mnLXUMc6yp9njQFjxDB_xGicY07fwIf8_94WtW8CEgQ
+  
+
+## Responder dispatch API 
+
+The base URL for **Responder dispatch API** is `http://localhost:8080/responder`.
+
+
+### Authentication
+
+These APIs require the jwt token returned by the responder login endpoint, only authenticated responders can send request 
+#### Request headers
+Authorization : "your jwt token"
+
+### 1. search for all pending requests
 
 #### Endpoint
 
 - **URL**: `/search`
 - **Method**: GET
 
-#### Parameters
-- **`rating` (optional)**: return only responder with rating larger than this value
+#### Request params
+None
+
+
 
 #### Example
 
 ```http
-GET http://localhost:8080/responder/search?rating=0.0
+GET http://localhost:8080/responder/search
 ```
+
 #### Response
 
 - **Success Response**:
-  - **HTTP Status Code**: 200 OK
-  - **Content-Type**: application/json
-  - **Example output**:
+    - **HTTP Status Code**: 200 OK
+    - **Content-Type**:application/json 
+    - **Example output**:
 ```json
 [
-    {
-        "id": 5,
-        "name": "responder1",
-        "phone": "123445",
-        "latitude": null,
-        "longitude": null,
-        "status": "available",
-        "rating": 10.0
+  {
+    "id": 4,
+    "caller": {
+      "name": "xiaoning bu",
+      "phone": "2062955128",
+      "password": "123"
     },
-    {
-        "id": 6,
-        "name": "TestResponder1",
-        "phone": "9999999999",
-        "latitude": 40.71,
-        "longitude": 70.89,
-        "status": "available",
-        "rating": 10.0
+    "responder": null,
+    "startTime": "2023-11-27T17:17:49.673141",
+    "arrivalTime": null,
+    "rating": null,
+    "feedback": null,
+    "status": "pending",
+    "emergencyLevel": 1,
+    "emergencyType": "medical",
+    "latitude": 11.11,
+    "longitude": 22.22,
+    "message": null
+  },
+  {
+    "id": 7,
+    "caller": {
+      "name": "test1",
+      "phone": "2062955128",
+      "password": "123"
     },
-    {
-        "id": 7,
-        "name": "testResponder2",
-        "phone": "9999999999",
-        "latitude": 50.71,
-        "longitude": 80.82,
-        "status": "available",
-        "rating": 10.0
-    }
+    "responder": null,
+    "startTime": "2023-11-27T18:29:40.286256",
+    "arrivalTime": null,
+    "rating": null,
+    "feedback": null,
+    "status": "pending",
+    "emergencyLevel": 1,
+    "emergencyType": "medical",
+    "latitude": 11.11,
+    "longitude": 22.22,
+    "message": null
+  }
 ]
 ```
 
@@ -255,197 +304,57 @@ GET http://localhost:8080/responder/search?rating=0.0
 - **Method**: GET
 
 #### Parameters
-- **`latitude` (required)**: latitude of the client
-- **`longitude` (required)**: longitude of the client
+- **`latitude` (required)**: latitude of the responder
+- **`longitude` (required)**: longitude of the responder
 - **`radius` (required)**: responders should be within this radius
 
 #### Example
 
 ```http
-GET http://localhost:8080/responder/search_distance
-```
-Example Request Body:
-```json
-{
-  "latitude": "51.0",
-  "longitude": "82.0",
-  "radius": 3
-}
+GET http://localhost:8080/responder/search_distance?latitude=11&longitude=11&radius=3
 ```
 #### Response
-
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: application/json
   - **Example output**:
 ```json
 [
-    {
-        "id": 7,
-        "name": "testResponder2",
-        "phone": "9999999999",
-        "latitude": 50.71,
-        "longitude": 80.82,
-        "status": "available",
-        "rating": 10.0
-    }
+  {
+    "id": 15,
+    "caller": {
+      "name": "xiaoning1",
+      "phone": "2062955128",
+      "password": "123"
+    },
+    "responder": null,
+    "startTime": "2023-11-29T14:35:09.097458",
+    "arrivalTime": null,
+    "rating": null,
+    "feedback": null,
+    "status": "pending",
+    "emergencyLevel": 3,
+    "emergencyType": "medical",
+    "latitude": 11.11,
+    "longitude": 11.22,
+    "message": null
+  }
 ]
 ```
 
-### 4. Dispatch a responder 
+### 4. responder accept a request
 
 #### Endpoint
 
-- **URL**: `/dispatch`
+- **URL**: `/accept/{id}`
 - **Method**: POST
-
-#### Request Body
-
-The request body should be a JSON object containing the following parameters:
-
-- **`id` (required)**: id of the responder that we want to dispatch
-- **`status` (required)**: status change of the responder
-- **`latitude` (required)**: latitude of the client
-- **`longitude` (required)**: longitude of the client
-
-#### Example
-
-```http
-POST http://localhost:8080/responder/dispatch
-```
-Example Request Body:
-```json
-{
-  "id": 6,
-  "status": "dispatched",
-  "latitude": "33.33",
-  "longitude": "22.22"
-}
-```
-
-#### Response
-
-- **Success Response**:
-  - **HTTP Status Code**: 200 OK or 409 Conflict (handled by ResponderNotAvailableException)
-  - **Content-Type**: Sting
-  - **Example output**: "Dispatched" or "Responder does not exist"/"Responder not available at this moment"
-
-### 5. Recommend a responder with the user's highest previous rate 
-
-#### Endpoint
-
-- **URL**: `/recommend/rate`
-- **Method**: GET
-
 #### Parameters
-- **`id` (required)**: The caller's userid
+- **`id` (required, path variable)**: id of the request
 
 #### Example
 
 ```http
-GET http://localhost:8080/responder/recommend/rate?user_id=1
-```
-Example Request Body:
-```json
-{
-  "id": 1
-}
-```
-
-#### Response
-
-- **Success Response**:
-  - **HTTP Status Code**: 200 OK
-  - **Content-Type**: application/json
-  - **Example output**: 
-```json
-{
-    "id": 2,
-    "name": "Second",
-    "phone": "2345678",
-    "latitude": 40.7128,
-    "longitude": 77.0,
-    "status": "available",
-    "rating": null
-}
-```
-
-### 6. Recommend responder with the highest frequency in user's call history
-
-#### Endpoint
-
-- **URL**: `/recommend/frequency`
-- **Method**: GET
-
-#### Parameters
-
-- **`id` (required)**: The caller's userid
-#### Example
-
-```http
-GET http://localhost:8080/responder/recommend/frequency?user_id=1
-```
-Example Request Body:
-```json
-{
-  "id": 1
-}
-```
-
-#### Response
-
-- **Success Response**:
-  - **HTTP Status Code**: 200 OK
-  - **Content-Type**: application/json
-  - **Example output**:
-```json
-{
-    "id": 1,
-    "name": "First",
-    "phone": "1234567",
-    "latitude": 40.7128,
-    "longitude": 74.006,
-    "status": "available",
-    "rating": null
-}
-```
-
-
-## Dispatch History Management Base URL
-
-The base URL for **dispatch history management** is `http://localhost:8080/dispatch-history`.
-
-### Authentication
-
-These APIs do not require authentication.
-
-### 1. Start a new dispatch and record its dispatch history
-
-#### Endpoint
-
-- **URL**: `/start`
-- **Method**: POST
-
-#### Request Body
-
-The request body should be a JSON object containing the following parameters:
-
-- **`user_id` (required)**: The userid of the caller
-- **`responder_id` (required)**: id of the responder
-- **`start_time` (required)**: the start time of the dispatch
-
-#### Example
-
-```http
-POST http://localhost:8080/dispatch-history/start
-```
-Example Request Body:
-```json
-{
-  "user_id": 1,
-  "responder_id": 2,
-  "start_time": "2023-10-19T11:42:12"
-}
+POST http://localhost:8080/responder/accept/7
 ```
 
 #### Response
@@ -453,34 +362,31 @@ Example Request Body:
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: String
-  - **Example output**: "Saved"
+  - **Example output**: "Accepted"
+  
 
+## Dispatch History Management API
 
-### 2. Rate a dispatch and provide feedback if wanted
+The base URL for **dispatch history management API** is `http://localhost:8080/dispatch-history`.
+
+### Authentication
+
+These APIs require user and responder to login before sending request. in particular /rate can only be accessed by user, other endpoints in this api can be accessed by user and responder 
+
+### 1. user rate a particular dispatch
 
 #### Endpoint
 
 - **URL**: `/rate`
 - **Method**: POST
 
-#### Request Body
+#### Parameters
+- **`id` (required)**: id of the dispatch history user is trying to rate
+- **`rating` (required)**: 9
 
-The request body should be a JSON object containing the following parameters:
-- **`id` (required)**: The dispatch id
-- **`rating` (required)**: rating of this dispatch service
-- **`feedback` (optional)**: feedback of this dispatch service
 #### Example
-
 ```http
-POST http://localhost:8080/dispatch-history/rate
-```
-Example Request Body:
-```json
-{
-  "id": 6,
-  "rating": 8.5,
-  "feedback": "Good"
-}
+POST http://localhost:8080/dispatch-history/rate?id=1&rating=9
 ```
 
 #### Response
@@ -490,38 +396,32 @@ Example Request Body:
   - **Content-Type**: String
   - **Example output**: "Rated"
 
-### 3. The responder arrives at scene
+
+### 2. mark arrival of the responder on scene
 
 #### Endpoint
 
 - **URL**: `/arrived`
 - **Method**: POST
 
-#### Request Body
-- **`id` (required)**: The dispatch id
-- **`arrival_time` (required)**: the time when the responder arrives at scene
+#### Parameters
+- **`id` (required)**: id of the dispatch history
 
 #### Example
 
 ```http
-POST http://localhost:8080/dispatch-history/arrived
+POST http://localhost:8080/dispatch-history/arrived?id=12
 ```
-Example Request Body:
-```json
-{
-  "id": 6,
-  "arrival_time": "2023-10-19T15:44:18"
-}
-```
+
 
 #### Response
 
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: String
-  - **Example output**: "Arrived"
+  - **Example output**: "arrived"
 
-### 4. The responder completes the client's requirement
+### 3. finish a dispatch (if user use this endpoint before any responder accept his request, it means that the user cancelled his request)
 
 #### Endpoint
 
@@ -529,19 +429,12 @@ Example Request Body:
 - **Method**: POST
 
 #### Request Body
-
-- **`id` (required)**: The dispatch id
+- **`id` (required)**: id of the dispatch history
 
 #### Example
 
 ```http
-POST http://localhost:8080/dispatch-history/finished
-```
-Example Request Body:
-```json
-{
-  "id": 6
-}
+POST http://localhost:8080/dispatch-history/finished?id=1
 ```
 
 #### Response
@@ -549,7 +442,8 @@ Example Request Body:
 - **Success Response**:
   - **HTTP Status Code**: 200 OK
   - **Content-Type**: String
-  - **Example output**: "Finished"
+  - **Example output**: "finished"
+  
 
 ### 5. Search dispatch histories
 
@@ -559,28 +453,12 @@ Example Request Body:
 - **Method**: GET
 
 #### Parameters
-- **`filterBy` (optional)**: can be filtered by 'Responder' or 'User'
-- **`id` (optional)**: specify the Responder's id or the User's id
+- **`status` (required, path variable)**: filter using status, return all dispatch history that belongs to the login user/responder with that status
 
 #### Example 1
 
 ```http
-GET http://localhost:8080/dispatch-history/search
-```
-Example Request Body:
-```json
-{}
-```
-#### Example 2
-```http
-GET http://localhost:8080/dispatch-history/search?filterBy=Responder&id=9
-```
-Example Request Body:
-```json
-{
-  "filterBy": "Responder",
-  "id": 9
-}
+GET http://localhost:8080/dispatch-history/search?status=dispatched
 ```
 
 #### Response
@@ -591,28 +469,75 @@ Example Request Body:
   - **Example output**:
 ```json
 [
-    {
-        "id": 6,
-        "caller": {
-            "id": 1,
-            "name": "Amy",
-            "phone": "12345678"
-        },
-        "responder": {
-            "id": 9,
-            "name": "testResponder2",
-            "phone": "9999999999",
-            "latitude": 50.71,
-            "longitude": 80.82,
-            "status": "available",
-            "rating": 9.5935,
-            "hibernateLazyInitializer": {}
-        },
-        "startTime": "2023-10-19T11:42:12",
-        "arrivalTime": "2023-10-19T15:44:18",
-        "rating": 9.0,
-        "feedback": "Good",
-        "status": "finished"
-    }
+  {
+    "id": 4,
+    "caller": {
+      "name": "xiaoning bu",
+      "phone": "2062955128",
+      "password": "123"
+    },
+    "responder": {
+      "name": "testResponder",
+      "phone": "1111111111",
+      "latitude": 11.11,
+      "longitude": 10.1,
+      "status": "available",
+      "rating": 9.9,
+      "password": "12341234"
+    },
+    "startTime": "2023-11-27T17:17:49.673141",
+    "arrivalTime": null,
+    "rating": null,
+    "feedback": null,
+    "status": "dispatched",
+    "emergencyLevel": 1,
+    "emergencyType": "medical",
+    "latitude": 11.11,
+    "longitude": 22.22,
+    "message": null
+  }
 ]
 ```
+
+## user API
+
+The base URL is `http://localhost:8080/user`.
+
+### Authentication
+
+client needs to login as a user and include the jwt token in the header
+
+### 1. send a new dispatch request
+
+#### Endpoint
+
+- **URL**: `/send_request`
+- **Method**: POST
+
+#### Parameters
+
+- **`emergencyLevel` (required)**: level of emergency of your request
+- **`emergencyType` (required)**: type of emergency of your request
+- **`latitude` (required)**: latitude of the request location
+- **`longitude` (required)**: longitude of the request location
+
+#### Example
+
+```http
+POST http://localhost:8080/user/send_request
+```
+Example Request Body:
+```json
+{
+  "emergencyLevel":1,
+  "emergencyType": "medical",
+  "latitude": 11.11,
+  "longitude":22.22
+}
+```
+#### Response
+
+- **Success Response**:
+  - **HTTP Status Code**: 200 OK
+  - **Content-Type**: String
+  - **Example output**: "request submitted"

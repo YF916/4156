@@ -1,5 +1,6 @@
 package com.example.demotest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.search.annotations.Latitude;
 import org.hibernate.search.annotations.Longitude;
 import org.hibernate.search.annotations.Spatial;
@@ -40,7 +41,7 @@ public class Responder {
 
     @Column(name = "rating")
     private Double rating;
-
+    @JsonIgnore
     @Column(name = "password")
     private String password;
     public Responder() {}

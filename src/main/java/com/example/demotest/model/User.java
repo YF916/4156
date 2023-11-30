@@ -1,6 +1,8 @@
 package com.example.demotest.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -16,7 +18,7 @@ public class User {
     @Pattern(regexp = "\\d+", message = "Phone number must contain only digits")
     @Column(name = "phone")
     private String phone;
-
+    @JsonIgnore
     @NotBlank
     @Column(name = "password")
     private String password;
