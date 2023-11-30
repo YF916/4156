@@ -14,6 +14,7 @@
     Development Platform: MacOS
 
     GitHub Repository Link: https://github.com/YF916/COMSW4156-ASE-project
+    GitHub Repository Link for client app: https://github.com/songzian/eds-web-app
 
 ### Build and run the application
 
