@@ -15,20 +15,6 @@
 
     GitHub Repository Link: https://github.com/YF916/COMSW4156-ASE-project
 
-### Create the Database
-Open a terminal and open a MySQL client as a user who can create new users.
-
-For example, on a Linux system, use the following command:
-
-`$ sudo mysql --password` -- Connects to MySQL as root and allows access to the user from all hosts
-
-Then create a new database by running the following commands at the mysql prompt:
-
-`mysql> create database db_example;` -- Creates the new database
-
-`mysql> create user 'springuser'@'%' identified by 'ThePassword';` -- Creates the user
-
-`mysql> grant all on db_example.* to 'springuser'@'%';` -- Gives all privileges to the new user on the newly created database
 ### Build and run the application
 
 in your application.properties file:
@@ -53,9 +39,9 @@ All API entry points are tested using postman: https://www.postman.com/yf916/wor
 
 
 
-**Unit Testing:**
+**Unit Testing, Internal & External Integration Testing:**
 
-All unit testing is stored [here](https://github.com/YF916/COMSW4156-ASE-project/tree/main/src/test/java/com/example/demotest).
+All unit testing, internal integration testing and external integration testing are stored [here](https://github.com/YF916/COMSW4156-ASE-project/tree/main/src/test/java/com/example/demotest).
 
 # Event Dispatch Service API Documentation
 
