@@ -278,5 +278,58 @@ public class IntegrationTest {
                 fail("Unexpected status code: " + statusCode);
         }
     }
+    @Test
+    public void testUserLoginWithInvalidCredentials() {
+        String requestBody = "{\"username\":\"wrongUser\", \"password\":\"wrongPass\"}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(requestBody)
+                .when()
+                .post("/authenticate/user")
+                .then()
+                .statusCode(401) // Assuming that the server returns 401 for invalid credentials
+                .body(containsString("Account credentials does not match "));
+    }
+
+    @Test
+    public void testMultipleDispatchRequestsByUser() {
+        // Login as user and get token
+        String loginBody = "{\"username\":\"testUser\", \"password\":\"testPass\"}";
+        String userToken = given()
+                .contentType(ContentType.JSON)
+                .body(loginBody)
+                .when()
+                .post("/authenticate/user")
+                .then()
+                .extract()
+                .response()
+                .asString();
+
+        // Send first dispatch request
+        String dispatchJson = "{\"emergencyLevel\":2, \"emergencyType\":\"medical\", \"latitude\":10.10, \"longitude\":20.20}";
+        given()
+                .header("Authorization", "Bearer " + userToken)
+                .contentType(ContentType.JSON)
+                .body(dispatchJson)
+                .when()
+                .post("/user/send_request")
+                .then()
+                .statusCode(anyOf(is(200), is(400)));
+
+        // Attempt to send another dispatch request
+        given()
+                .header("Authorization", "Bearer " + userToken)
+                .contentType(ContentType.JSON)
+                .body(dispatchJson)
+                .when()
+                .post("/user/send_request")
+                .then()
+                .statusCode(400);
+    }
+
+
+
+
 
 }
