@@ -239,6 +239,7 @@ public class IntegrationTest {
         Double radius = 3.50;
 
         Response response = given()
+                .header("Authorization", "Bearer " + token)
                 .contentType(ContentType.JSON)
                 .param("longitude", longitude)
                 .param("latitude", latitude)
