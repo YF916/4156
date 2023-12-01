@@ -59,6 +59,9 @@ jobs:
       - name: Dispatch History Controller Unit Test
         run: mvn -Dtest=DispatchHistoryControllerTest test
 
+      - name: Register Service Test
+        run: mvn -Dtest=RegisterServiceTest test
+
       - name: Integration Test
         run: mvn -Dtest=IntegrationTest test
 

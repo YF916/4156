@@ -25,7 +25,7 @@ public class RegisterService {
 
     @Transactional
     public void addUser(User user) {
-        if (userRepository.existsById(user.getName())|| responderRepository.existsById(user.getName())) {
+        if (userRepository.existsById(user.getName()) || responderRepository.existsById(user.getName())) {
             throw new UserAlreadyExistException ("Username already exists");
         }
         //passwordEncoder.encode(
@@ -34,7 +34,7 @@ public class RegisterService {
     }
     @Transactional
     public void addResponder(Responder responder) {
-        if (userRepository.existsById(responder.getName())|| responderRepository.existsById(responder.getName())) {
+        if (userRepository.existsById(responder.getName()) || responderRepository.existsById(responder.getName())) {
             throw new UserAlreadyExistException("Username already exists");
         }
         //passwordEncoder.encode(
