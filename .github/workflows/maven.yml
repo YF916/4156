@@ -35,8 +35,11 @@ jobs:
         run: mvn spring-boot:run &
 #        background: true
 
-      - name: Wait for Spring Boot Application to Start
-        run: sleep 30
+#      - name: Wait for Spring Boot Application to Start
+#        run: sleep 30
+
+      - name: Custom Authentication Provider Test
+        run: mvn -Dtest=CustomAuthenticationProviderTest test
 
       - name: Authentication Controller Unit Test
         run: mvn -Dtest=AuthenticationControllerTest test
