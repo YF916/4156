@@ -346,7 +346,14 @@ public class DispatchHistoryControllerTest {
         dispatchHistory.setStatus(testStatus);
         assertEquals(testStatus, dispatchHistory.getStatus(), "Status should be set and retrieved correctly.");
     }
+    @Test
+    public void testSetCallerWithNull() {
+        DispatchHistory dispatchHistory = new DispatchHistory();
 
+        // Set caller to null
+        dispatchHistory.setCaller(null);
+        assertNull(dispatchHistory.getCaller(), "Caller should be null after setting to null.");
+    }
 
 
 
