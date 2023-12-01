@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import com.example.demotest.exceptions.NoSuchAccountException;
 import com.example.demotest.service.AuthenticationService;
 
 import com.example.demotest.controller.AuthenticationController;
@@ -130,6 +131,37 @@ public class AuthenticationControllerTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+    @Test
+    public void testAuthenticateUser_InvalidCredentials() {
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("username", "invalidUser");
+        requestBody.put("password", "invalidPass");
+
+        when(authenticationService.authenticateUser(anyString(), anyString(), anyString()))
+                .thenThrow(new NoSuchAccountException("Invalid credentials"));
+
+        Exception exception = assertThrows(NoSuchAccountException.class, () -> {
+            authenticationController.authenticateUser(requestBody);
+        });
+
+        assertEquals("Invalid credentials", exception.getMessage());
+    }
+
+    @Test
+    public void testAuthenticateUser_InvalidRole() {
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("username", "testUser");
+        requestBody.put("password", "testPass");
+
+        when(authenticationService.authenticateUser(anyString(), anyString(), anyString()))
+                .thenThrow(new NoSuchAccountException("User does not have the required role"));
+
+        Exception exception = assertThrows(NoSuchAccountException.class, () -> {
+            authenticationController.authenticateUser(requestBody);
+        });
+
+        assertEquals("User does not have the required role", exception.getMessage());
     }
 }
 
