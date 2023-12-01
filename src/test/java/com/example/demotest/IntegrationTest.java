@@ -75,9 +75,10 @@ public class IntegrationTest {
 
         testUserSearch(token);
         testUserRequest(token);
+        testDispatchArrived(token, 9);
+        testDispatchFinished(token, 9);
         testUserRate(token, 9, 8);
         testUserAll(token);
-
     }
 
     private void testUserSearch(String token) {
@@ -143,6 +144,28 @@ public class IntegrationTest {
             default:
                 fail("Unexpected status code: " + statusCode);
         }
+    }
+
+    private void testDispatchArrived(String token, int id) {
+        given()
+                .header("Authorization", "Bearer " + token)
+                .param("id", id)
+                .when()
+                .post("/dispatch-history/arrived")
+                .then()
+                .statusCode(200)
+                .body(containsString("Arrived"));
+    }
+
+    private void testDispatchFinished(String token, int id) {
+        given()
+                .header("Authorization", "Bearer " + token)
+                .param("id", id)
+                .when()
+                .post("/dispatch-history/finished")
+                .then()
+                .statusCode(200)
+                .body(containsString("Finished"));
     }
 
     private void testUserAll(String token) {
@@ -297,6 +320,7 @@ public class IntegrationTest {
                 fail("Unexpected status code: " + statusCode);
         }
     }
+
     @Test
     public void testUserLoginWithInvalidCredentials() {
         String requestBody = "{\"username\":\"wrongUser\", \"password\":\"wrongPass\"}";
