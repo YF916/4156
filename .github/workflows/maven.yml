@@ -38,6 +38,9 @@ jobs:
 #      - name: Wait for Spring Boot Application to Start
 #        run: sleep 30
 
+      - name: Authentication Service Test
+        run: mvn -Dtest=AuthenticationServiceTest test
+
       - name: Custom Authentication Provider Test
         run: mvn -Dtest=CustomAuthenticationProviderTest test
 
