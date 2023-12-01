@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import com.example.demotest.exceptions.NoSuchAccountException;
+import com.example.demotest.exceptions.UserAlreadyExistException;
 import com.example.demotest.service.AuthenticationService;
 
 import com.example.demotest.controller.AuthenticationController;
@@ -163,5 +164,21 @@ public class AuthenticationControllerTest {
 
         assertEquals("User does not have the required role", exception.getMessage());
     }
+    @Test
+    public void testAuthenticateUser_UserAlreadyExists() {
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("username", "existingUser");
+        requestBody.put("password", "testPass");
+
+        when(authenticationService.authenticateUser("existingUser", "testPass", "user"))
+                .thenThrow(new UserAlreadyExistException("User already exists"));
+
+        Exception exception = assertThrows(UserAlreadyExistException.class, () -> {
+            authenticationController.authenticateUser(requestBody);
+        });
+
+        assertEquals("User already exists", exception.getMessage());
+    }
+
 }
 

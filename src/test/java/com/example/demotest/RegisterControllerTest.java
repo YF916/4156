@@ -1,12 +1,16 @@
 package com.example.demotest;
 
 import com.example.demotest.controller.RegisterController;
+import com.example.demotest.exceptions.UserAlreadyExistException;
 import com.example.demotest.service.RegisterService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +34,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.NestedServletException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,4 +73,7 @@ public class RegisterControllerTest {
 
         verify(registerService).addResponder(responder);
     }
+
+
+
 }
