@@ -47,6 +47,9 @@ jobs:
       - name: CustomExceptionHandlerTest Unit Test
         run: mvn -Dtest=CustomExceptionHandlerTest test
 
+      - name: JsonAuthenticationFilterTest Unit Test
+        run: mvn -Dtest=JsonAuthenticationFilterTest test
+
       - name: Register Controller Unit Test
         run: mvn -Dtest=RegisterControllerTest test
 
