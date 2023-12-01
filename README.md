@@ -36,6 +36,12 @@ Finally build using maven ```mvn clean install``` and run the application from y
 
 All API entry points are tested using postman: https://api.postman.com/collections/31111400-30ae9d1e-7e64-41e6-be68-6830a4124c24?access_key=PMAT-01HGGGVN6VFBGQFQJ1TWBFJS37
 
+**Branch Coverage:**
+
+
+<img width="1176" alt="Screenshot 2023-11-30 at 11 09 25 PM" src="https://github.com/YF916/COMSW4156-ASE-project/assets/69889753/e45b553e-5ec4-44ba-995c-1b0ab6bd31c9">
+
+
 
 
 
