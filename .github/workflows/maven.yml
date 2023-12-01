@@ -44,6 +44,9 @@ jobs:
       - name: Authentication Controller Unit Test
         run: mvn -Dtest=AuthenticationControllerTest test
 
+      - name: CustomExceptionHandlerTest Unit Test
+        run: mvn -Dtest=CustomExceptionHandlerTest test
+
       - name: Register Controller Unit Test
         run: mvn -Dtest=RegisterControllerTest test
 
