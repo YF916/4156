@@ -18,7 +18,7 @@ public class User {
     @Pattern(regexp = "\\d+", message = "Phone number must contain only digits")
     @Column(name = "phone")
     private String phone;
-    @JsonIgnore
+
     @NotBlank
     @Column(name = "password")
     private String password;
