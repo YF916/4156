@@ -41,7 +41,6 @@ public class Responder {
 
     @Column(name = "rating")
     private Double rating;
-    @JsonIgnore
     @Column(name = "password")
     private String password;
     public Responder() {}
